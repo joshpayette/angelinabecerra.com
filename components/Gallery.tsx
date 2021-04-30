@@ -114,6 +114,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     objectFit: 'cover',
     backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
   },
   iconButton: {
     padding: 0,
