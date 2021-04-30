@@ -20,9 +20,9 @@ const initialState: State = {
   currentSlideIndex: 0,
   bgImageLoaded: false,
   fgImageLoaded: false,
-  nextSlideIndex: null,
-  direction: null,
-  status: 'entered',
+  nextSlideIndex: 0,
+  direction: 'next',
+  status: 'loading',
 }
 const gallerySlice = createSlice({
   name: 'gallerySlice',
@@ -253,46 +253,61 @@ export const Gallery = ({ gallery }: Props) => {
    * Manage animation states
    */
   React.useEffect(() => {
-    if (!fgImageEl) {
+    if (!fgImageWrapperRef.current || !bgImageWrapperRef.current) {
       console.info('exiting useEffect, no fgImageEl found.')
       return
     }
     switch (status) {
       case 'exiting': {
-        gsap.to(fgImageEl, {
+        console.info('exiting')
+        gsap.to(fgImageWrapperRef.current, {
           x: direction === 'prev' ? '100vw' : '-100vw',
+          duration: 0.2,
           onComplete() {
             dispatch(slideExited())
           },
         })
-        gsap.to(bgImageEl, { opacity: 0, duration: 1 })
+        gsap.to(bgImageWrapperRef.current, {
+          opacity: 0,
+          duration: 0.2,
+          onComplete: () => {
+            // Animate the new background slide in
+            gsap.to(bgImageWrapperRef.current, { opacity: 0.2, duration: 1 })
+          },
+        })
         break
       }
       case 'exited': {
+        console.info('exited')
         dispatch(slideLoading())
         break
       }
       case 'loading': {
         if (bgImageLoaded && fgImageLoaded) {
+          console.info('images loaded')
           dispatch(slideEntering())
+          // TODO Delete the below probably
+          // Animate the new foreground slide in
+          // If next slide is is back, enter left; otherwise enter right
+          gsap.fromTo(
+            fgImageWrapperRef.current,
+            { x: direction === 'prev' ? '-100vw' : '100vw' },
+            { x: 0, duration: 0.2 }
+          )
         }
         break
       }
       case 'entering': {
-        gsap.fromTo(
-          fgImageEl,
-          {
-            x: direction === 'prev' ? '-100vw' : '100vw',
+        console.info('entering')
+        gsap.to(fgImageEl, {
+          x: 0,
+          opacity: 1,
+          duration: 0.4,
+          onComplete() {
+            dispatch(slideEntered())
           },
-          {
-            x: 0,
-            duration: 0.4,
-            onComplete() {
-              dispatch(slideEntered())
-            },
-          }
-        )
-        gsap.fromTo(bgImageEl, { opacity: 0 }, { opacity: 1, duration: 1 })
+        })
+        gsap.to(bgImageEl, { opacity: 0.8, duration: 1 })
       }
     }
   }, [
@@ -309,7 +324,7 @@ export const Gallery = ({ gallery }: Props) => {
   ])
 
   return (
-    <div>
+    <Swipe onSwipeLeft={() => nextSlide()} onSwipeRight={() => previousSlide()}>
       {status === 'loading' && (
         <div className={classes.loading}>
           <img src="/loading.svg" alt="Loading..." />
@@ -336,28 +351,22 @@ export const Gallery = ({ gallery }: Props) => {
           objectFit="cover"
           objectPosition="center"
           onLoad={() => dispatch(bgImageLoadComplete())}
-          quality="10"
+          quality="5"
         />
       </div>
-      <Swipe
-        onSwipeLeft={() => nextSlide()}
-        onSwipeRight={() => previousSlide()}
-      >
-        <div className={classes.track}>
-          <div className={classes.slide} ref={fgImageWrapperRef}>
-            <Image
-              src={images[currentSlideIndex]}
-              layout="fill"
-              objectFit="contain"
-              objectPosition="center"
-              quality="100"
-              className={classes.slideImage}
-              onLoad={() => dispatch(fgImageLoadComplete())}
-              priority
-            />
-          </div>
+      <div className={classes.track}>
+        <div className={classes.slide} ref={fgImageWrapperRef}>
+          <Image
+            src={images[currentSlideIndex]}
+            layout="fill"
+            objectFit="contain"
+            objectPosition="center"
+            quality="100"
+            className={classes.slideImage}
+            onLoad={() => dispatch(fgImageLoadComplete())}
+          />
         </div>
-      </Swipe>
-    </div>
+      </div>
+    </Swipe>
   )
 }
