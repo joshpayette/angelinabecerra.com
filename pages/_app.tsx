@@ -14,13 +14,21 @@ const useStyles = makeStyles((theme) => ({
       6
     )}px)`,
     overflow: 'hidden',
-    paddingTop: theme.spacing(2),
   },
   '@media (orientation: landscape) and (max-height: 500px)': {
     main: {
       height: `calc(100vh - ${
         theme.mixins.toolbar.minHeight
       }px - ${theme.spacing(2)}px)`,
+      overflowY: 'scroll',
+    },
+  },
+  '@global': {
+    body: {
+      height: '100vh',
+    },
+    '#__next': {
+      height: '100%',
     },
   },
 }))

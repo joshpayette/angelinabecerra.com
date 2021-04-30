@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import Image from 'next/image'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import gsap from 'gsap'
 import Swipe from 'react-easy-swipe'
@@ -10,7 +9,6 @@ import { IconButton } from '@material-ui/core'
 
 interface State {
   currentSlideIndex: number
-  bgImageLoaded: boolean
   fgImageLoaded: boolean
   nextSlideIndex: number
   direction: 'prev' | 'next'
@@ -18,7 +16,6 @@ interface State {
 }
 const initialState: State = {
   currentSlideIndex: 0,
-  bgImageLoaded: false,
   fgImageLoaded: false,
   nextSlideIndex: 0,
   direction: 'next',
@@ -61,7 +58,6 @@ const gallerySlice = createSlice({
     },
     slideLoading(state: State) {
       state.status = 'loading'
-      state.bgImageLoaded = false
       state.fgImageLoaded = false
     },
     slideEntering(state: State) {
@@ -69,9 +65,6 @@ const gallerySlice = createSlice({
     },
     slideEntered(state: State) {
       state.status = 'entered'
-    },
-    bgImageLoadComplete(state) {
-      state.bgImageLoaded = true
     },
     fgImageLoadComplete(state) {
       state.fgImageLoaded = true
@@ -114,6 +107,13 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     zIndex: 1,
     filter: 'blur(6px)',
+    overflow: 'hidden',
+  },
+  bgImage: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    backgroundPosition: 'center',
   },
   iconButton: {
     padding: 0,
@@ -129,28 +129,38 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: 'rgba(0,0,0,0.8)',
   },
   slide: {
-    width: 'calc(100vw - 100px)',
-    height: `calc(100vh - ${theme.spacing(12)}px - ${
+    width: 'calc(100vw - 50px)',
+    height: `calc(100vh - ${theme.spacing(6)}px - ${
       theme.mixins.toolbar.minHeight
     }px)`,
     position: 'relative',
     zIndex: 3,
-    padding: theme.spacing(2),
+    boxSizing: 'border-box',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: theme.spacing(2),
+    [theme.breakpoints.up('md')]: {
+      width: 'calc(100vw - 100px)',
+      height: `calc(100vh - ${theme.spacing(10)}px - ${
+        theme.mixins.toolbar.minHeight
+      }px)`,
+    },
     // backgroundColor: '#f00',
   },
   '@media (orientation: landscape) and (max-height: 500px)': {
     slide: {
-      height: `calc(100vh - ${theme.spacing(6)}px - ${
+      height: `calc(100vh - ${theme.spacing(2)}px - ${
         theme.mixins.toolbar.minHeight
       }px)`,
+      marginTop: 0,
     },
   },
   slideImage: {
-    filter: `
-      drop-shadow(0 -5px 0 #fff)
-      drop-shadow(0 5px 0 #fff)
-      drop-shadow(-5px 0 0 #fff)
-      drop-shadow(5px 0 0 #fff)`,
+    border: `5px solid #fff`,
+    position: 'absolute',
+    maxHeight: '100%',
+    maxWidth: '100%',
   },
   loading: {
     width: '100vw',
@@ -191,18 +201,11 @@ export const Gallery = ({ gallery }: Props) => {
     slideExited,
     slideExiting,
     slideLoading,
-    bgImageLoadComplete,
     fgImageLoadComplete,
   } = gallerySlice.actions
 
   const [state, dispatch] = React.useReducer(reducer, initialState)
-  const {
-    currentSlideIndex,
-    bgImageLoaded,
-    fgImageLoaded,
-    direction,
-    status,
-  } = state
+  const { currentSlideIndex, fgImageLoaded, direction, status } = state
   const { images } = gallery
 
   const bgImageWrapperRef: React.RefObject<HTMLDivElement> = React.useRef()
@@ -210,23 +213,7 @@ export const Gallery = ({ gallery }: Props) => {
     ?.childNodes[0] as HTMLImageElement
 
   const fgImageWrapperRef: React.RefObject<HTMLDivElement> = React.useRef()
-  const fgImageEl = fgImageWrapperRef.current?.firstChild
-    ?.childNodes[0] as HTMLImageElement
-
-  /**
-   * Remove overflow from next/image wrapper div
-   * Necessary to get the white border around image to show
-   */
-  React.useEffect(() => {
-    const fgImageWrapperEl = fgImageWrapperRef.current
-      ?.firstChild as HTMLDivElement
-    if (fgImageWrapperEl) {
-      fgImageWrapperEl.style.cssText = fgImageWrapperEl.style.cssText.replace(
-        'overflow: hidden',
-        ''
-      )
-    }
-  }, [])
+  const fgImageRef: React.RefObject<HTMLImageElement> = React.useRef()
 
   const previousSlide = React.useCallback(() => {
     dispatch(slideExiting({ direction: 'prev', galleryLength: images.length }))
@@ -299,7 +286,7 @@ export const Gallery = ({ gallery }: Props) => {
         break
       }
       case 'loading': {
-        if (bgImageLoaded && fgImageLoaded) {
+        if (fgImageLoaded) {
           dispatch(slideEntering())
         }
         break
@@ -328,10 +315,9 @@ export const Gallery = ({ gallery }: Props) => {
     }
   }, [
     bgImageEl,
-    bgImageLoaded,
     fgImageLoaded,
     direction,
-    fgImageEl,
+    fgImageRef,
     status,
     slideExited,
     slideLoading,
@@ -361,25 +347,20 @@ export const Gallery = ({ gallery }: Props) => {
         <ChevronRight className={classes.arrowIcon} />
       </IconButton>
       <div className={classes.background} ref={bgImageWrapperRef}>
-        <Image
-          src={images[currentSlideIndex]}
-          layout="fill"
-          objectFit="cover"
-          objectPosition="center"
-          onLoad={() => dispatch(bgImageLoadComplete())}
-          quality="5"
+        <div
+          className={classes.bgImage}
+          style={{
+            backgroundImage: `url(${images[currentSlideIndex]})`,
+          }}
         />
       </div>
       <div className={classes.mask} />
       <div className={classes.track}>
         <div className={classes.slide} ref={fgImageWrapperRef}>
-          <Image
+          <img
             src={images[currentSlideIndex]}
-            layout="fill"
-            objectFit="contain"
-            objectPosition="center"
-            quality="100"
             className={classes.slideImage}
+            ref={fgImageRef}
             onLoad={() => dispatch(fgImageLoadComplete())}
           />
         </div>
