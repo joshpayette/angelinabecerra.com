@@ -49,9 +49,15 @@ export const NavLink = ({ siteLink }: Props) => {
         onClose={handleMenuClose}
       >
         {siteLink.childLinks.map((childLink) => (
-          <MenuItem key={childLink.label} button onClick={handleMenuClose}>
+          <MenuItem button={false} key={childLink.label}>
             <Link href={childLink.path}>
-              <MuiLink color="inherit" className={classes.link}>
+              <MuiLink
+                component="a"
+                color="inherit"
+                className={classes.link}
+                onClick={handleMenuClose}
+                style={{ cursor: 'pointer' }}
+              >
                 {childLink.label}
               </MuiLink>
             </Link>
