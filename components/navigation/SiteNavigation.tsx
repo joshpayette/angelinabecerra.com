@@ -14,6 +14,7 @@ import { siteLinks } from 'components/navigation/links'
 import { makeStyles } from '@material-ui/core/styles'
 import { DrawerLink } from './DrawerLink'
 import { NavLink } from './NavLink'
+import Link from 'next/link'
 
 const useStyles = makeStyles((theme) => ({
   childList: {
@@ -25,12 +26,19 @@ const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
   },
+  navItems: {
+    flexGrow: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
   navLinkWrapper: {
     display: 'flex',
   },
   title: {
-    flexGrow: 1,
     fontSize: 36,
+    textDecoration: 'none',
+    color: '#fff',
     fontFamily: `'Sacramento', cursive`,
     [theme.breakpoints.up('sm')]: {
       fontSize: 48,
@@ -46,27 +54,31 @@ export const SiteNavigation = () => {
     <React.Fragment>
       <AppBar position="sticky" color="transparent" elevation={0}>
         <Toolbar>
-          <Typography variant="h4" component="span" className={classes.title}>
-            Angelina Becerra
-          </Typography>
-          <Hidden mdUp>
-            <IconButton
-              edge="start"
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="menu"
-              onClick={() => setDrawerOpen(true)}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Hidden>
-          <Hidden smDown>
-            <div className={classes.navLinkWrapper}>
-              {siteLinks.map((siteLink) => (
-                <NavLink key={siteLink.label} siteLink={siteLink} />
-              ))}
-            </div>
-          </Hidden>
+          <Link href="/" passHref>
+            <Typography variant="h4" component="a" className={classes.title}>
+              Angelina Becerra
+            </Typography>
+          </Link>
+          <div className={classes.navItems}>
+            <Hidden mdUp>
+              <IconButton
+                edge="start"
+                className={classes.menuButton}
+                color="inherit"
+                aria-label="menu"
+                onClick={() => setDrawerOpen(true)}
+              >
+                <MenuIcon />
+              </IconButton>
+            </Hidden>
+            <Hidden smDown>
+              <div className={classes.navLinkWrapper}>
+                {siteLinks.map((siteLink) => (
+                  <NavLink key={siteLink.label} siteLink={siteLink} />
+                ))}
+              </div>
+            </Hidden>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
