@@ -37,7 +37,6 @@ export async function getStaticProps({ params }: GetStaticPropsContext) {
   } else {
     imageList = fs.readdirSync(`./public/galleries/${folderName}`)
   }
-
   return {
     props: {
       imageList: imageList.map((image) => `/galleries/${folderName}/${image}`),

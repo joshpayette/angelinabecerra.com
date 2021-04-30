@@ -1,0 +1,3 @@
+- Convert logo font to image for better loading
+  - Alternatively, hook into font load?
+-
