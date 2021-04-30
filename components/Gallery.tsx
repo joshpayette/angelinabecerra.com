@@ -112,7 +112,7 @@ const useStyles = makeStyles((theme) => ({
   bgImage: {
     width: '100%',
     height: '100%',
-    objectFit: 'cover',
+    backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
   },
