@@ -262,12 +262,10 @@ export const Gallery = ({ gallery }: Props) => {
    */
   React.useEffect(() => {
     if (!fgImageWrapperRef.current || !bgImageWrapperRef.current) {
-      console.info('exiting useEffect, no fgImageEl found.')
       return
     }
     switch (status) {
       case 'exiting': {
-        console.info('exiting')
         gsap.fromTo(
           fgImageWrapperRef.current,
           { x: 0 },
@@ -285,36 +283,21 @@ export const Gallery = ({ gallery }: Props) => {
           {
             opacity: 0,
             duration: 1,
-            // onComplete: () => {
-            //   // Animate the new background slide in
-            //   gsap.to(bgImageWrapperRef.current, { opacity: 0.2, duration: 1 })
-            // },
           }
         )
         break
       }
       case 'exited': {
-        console.info('exited')
         dispatch(slideLoading())
         break
       }
       case 'loading': {
         if (bgImageLoaded && fgImageLoaded) {
-          console.info('images loaded')
           dispatch(slideEntering())
-          // TODO Delete the below probably
-          // Animate the new foreground slide in
-          // If next slide is is back, enter left; otherwise enter right
-          // gsap.fromTo(
-          //   fgImageWrapperRef.current,
-          //   { x: direction === 'prev' ? '-100vw' : '100vw' },
-          //   { x: 0, duration: 0.2 }
-          // )
         }
         break
       }
       case 'entering': {
-        console.info('entering')
         gsap.fromTo(
           fgImageWrapperRef.current,
           {
