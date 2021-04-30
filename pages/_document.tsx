@@ -12,11 +12,11 @@ export default class MyDocument extends Document {
           <meta name="theme-color" content={theme.palette.primary.main} />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           {/* 
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-family: 'Sacramento', cursive;
           */}
           <link
-            href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Sacramento&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Sacramento&display=swap"
             rel="stylesheet"
           />
         </Head>

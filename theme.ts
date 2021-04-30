@@ -12,5 +12,8 @@ export const theme = responsiveFontSizes(
       secondary: red,
       type: 'dark',
     },
+    typography: {
+      fontFamily: 'Inter',
+    },
   })
 )
