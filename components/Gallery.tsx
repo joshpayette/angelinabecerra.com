@@ -162,6 +162,8 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     maxHeight: '100%',
     maxWidth: '100%',
+    boxShadow:
+      '0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22)',
   },
   loading: {
     width: '100vw',
