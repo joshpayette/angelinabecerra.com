@@ -83,14 +83,6 @@ const useStyles = makeStyles((theme) => ({
     width: '40px!important',
     height: '40px!important',
   },
-  arrowIcon: {
-    width: '20px!important',
-    height: '20px!important',
-    [theme.breakpoints.up('md')]: {
-      width: '40px!important',
-      height: '40px!important',
-    },
-  },
   arrowLeft: {
     left: 0,
     justifyContent: 'flex-start',
@@ -98,6 +90,14 @@ const useStyles = makeStyles((theme) => ({
   arrowRight: {
     right: 0,
     justifyContent: 'flex-end',
+  },
+  arrowIcon: {
+    width: '20px!important',
+    height: '20px!important',
+    [theme.breakpoints.up('md')]: {
+      width: '40px!important',
+      height: '40px!important',
+    },
   },
   background: {
     position: 'absolute',
@@ -330,11 +330,6 @@ export const Gallery = ({ gallery }: Props) => {
 
   return (
     <Swipe onSwipeLeft={() => nextSlide()} onSwipeRight={() => previousSlide()}>
-      {/* {status === 'loading' && (
-        <div className={classes.loading}>
-          <img src="/loading.svg" alt="Loading..." />
-        </div>
-      )} */}
       <IconButton
         onClick={() => previousSlide()}
         className={clsx(classes.arrow, classes.arrowLeft, classes.iconButton)}

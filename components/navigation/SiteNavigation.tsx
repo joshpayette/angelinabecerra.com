@@ -4,9 +4,9 @@ import {
   Divider,
   Drawer,
   IconButton,
+  Link as MuiLink,
   List,
   Toolbar,
-  Typography,
   Hidden,
 } from '@material-ui/core'
 import { Menu as MenuIcon } from '@material-ui/icons'
@@ -14,7 +14,6 @@ import { siteLinks } from 'components/navigation/links'
 import { makeStyles } from '@material-ui/core/styles'
 import { DrawerLink } from './DrawerLink'
 import { NavLink } from './NavLink'
-import Link from 'next/link'
 
 const useStyles = makeStyles((theme) => ({
   childList: {
@@ -32,15 +31,15 @@ const useStyles = makeStyles((theme) => ({
   navLinkWrapper: {
     display: 'flex',
   },
-  title: {
-    fontSize: '2.25rem',
-    textDecoration: 'none',
-    color: '#fff',
-    fontFamily: `'Sacramento', cursive`,
-    padding: theme.spacing(1, 0, 1, 0),
+  logo: {
+    width: '100%',
+    height: 'auto',
+    maxHeight: 70,
+    padding: theme.spacing(2, 0, 1, 0),
     [theme.breakpoints.up('md')]: {
-      fontSize: '3.75rem',
-      padding: theme.spacing(2, 0, 1, 0),
+      width: '100%',
+      height: 'auto',
+      maxHeight: 89,
     },
   },
 }))
@@ -53,11 +52,14 @@ export const SiteNavigation = () => {
     <React.Fragment>
       <AppBar position="sticky" color="transparent" elevation={0}>
         <Toolbar>
-          <Link href="/" passHref>
-            <Typography variant="h4" component="a" className={classes.title}>
-              Angelina Becerra
-            </Typography>
-          </Link>
+          <div></div>
+          <MuiLink href="/">
+            <img
+              src="/logo.png"
+              alt="Angelina Becerra logo"
+              className={classes.logo}
+            />
+          </MuiLink>
           <div className={classes.navItems}>
             <Hidden mdUp>
               <IconButton

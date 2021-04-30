@@ -15,7 +15,7 @@ export default class MyDocument extends Document {
             font-family: 'Sacramento', cursive;
           */}
           <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Sacramento&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap"
             rel="stylesheet"
           />
         </Head>
