@@ -341,11 +341,11 @@ export const Gallery = ({ gallery }: Props) => {
 
   return (
     <Swipe onSwipeLeft={() => nextSlide()} onSwipeRight={() => previousSlide()}>
-      {status === 'loading' && (
+      {/* {status === 'loading' && (
         <div className={classes.loading}>
           <img src="/loading.svg" alt="Loading..." />
         </div>
-      )}
+      )} */}
       <IconButton
         onClick={() => previousSlide()}
         className={clsx(classes.arrow, classes.arrowLeft, classes.iconButton)}
