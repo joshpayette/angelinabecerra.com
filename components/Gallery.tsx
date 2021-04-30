@@ -289,7 +289,7 @@ export const Gallery = ({ gallery }: Props) => {
           { opacity: 1 },
           {
             opacity: 0,
-            duration: 1,
+            duration: 0.2,
           }
         )
         break
@@ -313,7 +313,7 @@ export const Gallery = ({ gallery }: Props) => {
           {
             x: 0,
             opacity: 1,
-            duration: 0.4,
+            duration: 0.2,
             onComplete() {
               dispatch(slideEntered())
             },
@@ -322,7 +322,7 @@ export const Gallery = ({ gallery }: Props) => {
         gsap.fromTo(
           bgImageWrapperRef.current,
           { opacity: 0 },
-          { opacity: 1, duration: 1 }
+          { opacity: 1, duration: 0.2 }
         )
       }
     }
