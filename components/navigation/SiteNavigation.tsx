@@ -23,9 +23,6 @@ const useStyles = makeStyles((theme) => ({
   list: {
     width: 250,
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
   navItems: {
     flexGrow: 1,
     display: 'flex',
@@ -62,8 +59,7 @@ export const SiteNavigation = () => {
           <div className={classes.navItems}>
             <Hidden mdUp>
               <IconButton
-                edge="start"
-                className={classes.menuButton}
+                edge="end"
                 color="inherit"
                 aria-label="menu"
                 onClick={() => setDrawerOpen(true)}
