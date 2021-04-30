@@ -33,12 +33,14 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
   },
   title: {
-    fontSize: 36,
+    fontSize: '2.25rem',
     textDecoration: 'none',
     color: '#fff',
     fontFamily: `'Sacramento', cursive`,
-    [theme.breakpoints.up('sm')]: {
-      fontSize: 48,
+    padding: theme.spacing(1, 0, 1, 0),
+    [theme.breakpoints.up('md')]: {
+      fontSize: '3.75rem',
+      padding: theme.spacing(2, 0, 1, 0),
     },
   },
 }))
