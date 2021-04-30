@@ -312,7 +312,7 @@ export const Gallery = ({ gallery }: Props) => {
         <ChevronLeft />
       </IconButton>
       <IconButton
-        onClick={() => previousSlide()}
+        onClick={() => nextSlide()}
         className={clsx(classes.arrow, classes.arrowRight, classes.iconButton)}
         edge="end"
       >
