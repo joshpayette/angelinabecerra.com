@@ -3,6 +3,13 @@ import * as React from 'react'
 import fs from 'fs'
 import { Gallery } from 'components/Gallery'
 
+/**
+ * Shape of the parsed JSON data for an order.json
+ */
+interface OrderConfig {
+  images: string[]
+}
+
 export async function getStaticPaths() {
   return {
     paths: [
@@ -19,7 +26,17 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }: GetStaticPropsContext) {
   const { folderName } = params
-  const imageList = fs.readdirSync(`./public/galleries/${folderName}`)
+  const orderConfigPath = `./public/galleries/${folderName}/order.json`
+  let imageList: string[] = []
+
+  if (fs.existsSync(orderConfigPath)) {
+    const orderConfig: OrderConfig = JSON.parse(
+      fs.readFileSync(orderConfigPath, 'utf8')
+    )
+    imageList = orderConfig.images
+  } else {
+    imageList = fs.readdirSync(`./public/galleries/${folderName}`)
+  }
 
   return {
     props: {
