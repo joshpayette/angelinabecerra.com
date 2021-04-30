@@ -85,6 +85,9 @@ const useStyles = makeStyles((theme) => ({
     top: '50%',
     transform: 'translateY(-50%)',
     zIndex: 5,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   arrowLeft: {
     left: 0,
@@ -101,6 +104,10 @@ const useStyles = makeStyles((theme) => ({
     opacity: 0.2,
     zIndex: 1,
     filter: 'blur(6px)',
+  },
+  iconButton: {
+    padding: 0,
+    margin: theme.spacing(1),
   },
   slide: {
     width: 'calc(100vw - 80px)',
@@ -291,7 +298,7 @@ export const Gallery = ({ gallery }: Props) => {
   ])
 
   return (
-    <React.Fragment>
+    <div>
       {status === 'loading' && (
         <div className={classes.loading}>
           <img src="/loading.svg" alt="Loading..." />
@@ -299,13 +306,15 @@ export const Gallery = ({ gallery }: Props) => {
       )}
       <IconButton
         onClick={() => previousSlide()}
-        className={clsx(classes.arrow, classes.arrowLeft)}
+        className={clsx(classes.arrow, classes.arrowLeft, classes.iconButton)}
+        edge="start"
       >
         <ChevronLeft />
       </IconButton>
       <IconButton
         onClick={() => previousSlide()}
-        className={clsx(classes.arrow, classes.arrowRight)}
+        className={clsx(classes.arrow, classes.arrowRight, classes.iconButton)}
+        edge="end"
       >
         <ChevronRight />
       </IconButton>
@@ -338,6 +347,6 @@ export const Gallery = ({ gallery }: Props) => {
           </div>
         </div>
       </Swipe>
-    </React.Fragment>
+    </div>
   )
 }
