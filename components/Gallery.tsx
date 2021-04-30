@@ -82,18 +82,29 @@ const gallerySlice = createSlice({
 const useStyles = makeStyles((theme) => ({
   arrow: {
     position: 'absolute',
-    top: '50%',
-    transform: 'translateY(-50%)',
+    top: `calc((100vh - ${theme.mixins.toolbar.minHeight}px) / 2)`,
+    transform: 'translateY(50%)',
     zIndex: 5,
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    width: '40px!important',
+    height: '40px!important',
+  },
+  arrowIcon: {
+    width: '20px!important',
+    height: '20px!important',
+    [theme.breakpoints.up('md')]: {
+      width: '40px!important',
+      height: '40px!important',
+    },
   },
   arrowLeft: {
     left: 0,
+    justifyContent: 'flex-start',
   },
   arrowRight: {
     right: 0,
+    justifyContent: 'flex-end',
   },
   background: {
     position: 'absolute',
@@ -309,14 +320,14 @@ export const Gallery = ({ gallery }: Props) => {
         className={clsx(classes.arrow, classes.arrowLeft, classes.iconButton)}
         edge="start"
       >
-        <ChevronLeft />
+        <ChevronLeft className={classes.arrowIcon} />
       </IconButton>
       <IconButton
         onClick={() => nextSlide()}
         className={clsx(classes.arrow, classes.arrowRight, classes.iconButton)}
         edge="end"
       >
-        <ChevronRight />
+        <ChevronRight className={classes.arrowIcon} />
       </IconButton>
       <div className={classes.background} ref={bgImageWrapperRef}>
         <Image
