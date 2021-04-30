@@ -32,7 +32,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>PUGGY.gg</title>
+        <title>Photographer, Writer, Observer | Angelina Becerra</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
