@@ -19,7 +19,7 @@ const initialState: State = {
   fgImageLoaded: false,
   nextSlideIndex: 0,
   direction: 'next',
-  status: 'loading',
+  status: 'entered',
 }
 const gallerySlice = createSlice({
   name: 'gallerySlice',

@@ -50,17 +50,16 @@ export const NavLink = ({ siteLink }: Props) => {
       >
         {siteLink.childLinks.map((childLink) => (
           <MenuItem button={false} key={childLink.label}>
-            <Link href={childLink.path}>
-              <MuiLink
-                component="a"
-                color="inherit"
-                className={classes.link}
-                onClick={handleMenuClose}
-                style={{ cursor: 'pointer' }}
-              >
-                {childLink.label}
-              </MuiLink>
-            </Link>
+            <MuiLink
+              component="a"
+              href={childLink.path}
+              color="inherit"
+              className={classes.link}
+              onClick={handleMenuClose}
+              style={{ cursor: 'pointer' }}
+            >
+              {childLink.label}
+            </MuiLink>
           </MenuItem>
         ))}
       </Menu>
