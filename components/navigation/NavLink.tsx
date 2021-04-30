@@ -2,12 +2,29 @@ import * as React from 'react'
 import { Button, Link as MuiLink, Menu, MenuItem } from '@material-ui/core'
 import Link from 'next/link'
 import { SiteLinkType } from 'types'
+import { makeStyles } from '@material-ui/core/styles'
+import clsx from 'clsx'
+
+const useStyles = makeStyles((theme) => ({
+  button: {
+    padding: 0,
+  },
+  link: {
+    fontSize: '1.2rem',
+    fontWeight: 500,
+    lineHeight: '1.50rem',
+    color: '#fff',
+    textTransform: 'none',
+    margin: theme.spacing(0, 3),
+  },
+}))
 
 interface Props {
   siteLink: SiteLinkType
 }
 
 export const NavLink = ({ siteLink }: Props) => {
+  const classes = useStyles()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -20,9 +37,7 @@ export const NavLink = ({ siteLink }: Props) => {
 
   return siteLink.path ? (
     <Link href={siteLink.path} passHref>
-      <Button component="a" variant="text" color="inherit">
-        {siteLink.label}
-      </Button>
+      <MuiLink className={classes.link}>{siteLink.label}</MuiLink>
     </Link>
   ) : (
     <React.Fragment>
@@ -36,7 +51,9 @@ export const NavLink = ({ siteLink }: Props) => {
         {siteLink.childLinks.map((childLink) => (
           <MenuItem key={childLink.label} button onClick={handleMenuClose}>
             <Link href={childLink.path}>
-              <MuiLink color="inherit">{childLink.label}</MuiLink>
+              <MuiLink color="inherit" className={classes.link}>
+                {childLink.label}
+              </MuiLink>
             </Link>
           </MenuItem>
         ))}
@@ -47,6 +64,7 @@ export const NavLink = ({ siteLink }: Props) => {
         onClick={handleMenuOpen}
         aria-haspopup="true"
         aria-controls={`${siteLink.label} Menu`}
+        className={clsx(classes.link, classes.button)}
       >
         {siteLink.label}
       </Button>
