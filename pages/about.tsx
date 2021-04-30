@@ -19,14 +19,14 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     height: '100%',
     maxHeight: '75vh',
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('sm')]: {
       maxHeight: 'initial',
     },
   },
   textWrapper: {
     padding: theme.spacing(2),
     [theme.breakpoints.up('md')]: {
-      padding: theme.spacing(8),
+      padding: theme.spacing(4),
     },
   },
   greyText: {
@@ -57,7 +57,7 @@ export default function AboutPage() {
         alignItems="flex-start"
         className={classes.fullHeight}
       >
-        <Grid item xs={12} md={6} className={classes.imageWrapper}>
+        <Grid item xs={12} sm={6} className={classes.imageWrapper}>
           <Image
             src="/angelina-bio.jpg"
             alt="Angelina Becerra Self Photo"
@@ -66,7 +66,7 @@ export default function AboutPage() {
             objectPosition="center"
           />
         </Grid>
-        <Grid item xs={12} md={6} className={classes.textWrapper}>
+        <Grid item xs={12} sm={6} className={classes.textWrapper}>
           <Typography
             variant="h3"
             component="h1"
