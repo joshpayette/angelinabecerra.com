@@ -11,10 +11,17 @@ const useStyles = makeStyles((theme) => ({
   main: {
     width: '100%',
     height: `calc(100vh - ${theme.mixins.toolbar.minHeight}px - ${theme.spacing(
-      2
+      6
     )}px)`,
     overflow: 'hidden',
     paddingTop: theme.spacing(2),
+  },
+  '@media (orientation: landscape) and (max-height: 500px)': {
+    main: {
+      height: `calc(100vh - ${
+        theme.mixins.toolbar.minHeight
+      }px - ${theme.spacing(2)}px)`,
+    },
   },
 }))
 

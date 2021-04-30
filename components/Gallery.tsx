@@ -110,8 +110,8 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     left: 0,
     top: 0,
-    width: '100vw',
-    height: '100vh',
+    width: '100%',
+    height: '100%',
     zIndex: 1,
     filter: 'blur(6px)',
   },
@@ -124,19 +124,26 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 2,
     left: 0,
     top: 0,
-    width: '100vw',
+    width: '100%',
     height: '100vh',
     backgroundColor: 'rgba(0,0,0,0.8)',
   },
   slide: {
-    width: 'calc(100vw - 80px)',
-    height: `calc(100vh - ${theme.spacing(6)}px - ${
+    width: 'calc(100vw - 100px)',
+    height: `calc(100vh - ${theme.spacing(12)}px - ${
       theme.mixins.toolbar.minHeight
     }px)`,
     position: 'relative',
     zIndex: 3,
     padding: theme.spacing(2),
     // backgroundColor: '#f00',
+  },
+  '@media (orientation: landscape) and (max-height: 500px)': {
+    slide: {
+      height: `calc(100vh - ${theme.spacing(6)}px - ${
+        theme.mixins.toolbar.minHeight
+      }px)`,
+    },
   },
   slideImage: {
     filter: `
