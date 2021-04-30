@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
   arrow: {
     position: 'absolute',
     top: '50%',
-    transform: 'translateY(-25%)',
+    transform: 'translateY(-50%)',
     zIndex: 5,
   },
   arrowLeft: {
