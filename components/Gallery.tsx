@@ -6,12 +6,16 @@ import gsap from 'gsap'
 
 interface State {
   currentSlideIndex: number
+  bgImageLoaded: boolean
+  fgImageLoaded: boolean
   nextSlideIndex: number
   direction: 'prev' | 'next'
   status: 'exiting' | 'exited' | 'entering' | 'entered' | 'loading'
 }
 const initialState: State = {
   currentSlideIndex: 0,
+  bgImageLoaded: false,
+  fgImageLoaded: false,
   nextSlideIndex: null,
   direction: null,
   status: 'entered',
@@ -28,6 +32,7 @@ const gallerySlice = createSlice({
       }>
     ) {
       state.status = 'exiting'
+      state.direction = action.payload.direction
       switch (action.payload.direction) {
         case 'prev':
           if (state.currentSlideIndex === 0) {
@@ -52,12 +57,20 @@ const gallerySlice = createSlice({
     },
     slideLoading(state: State) {
       state.status = 'loading'
+      state.bgImageLoaded = false
+      state.fgImageLoaded = false
     },
     slideEntering(state: State) {
       state.status = 'entering'
     },
     slideEntered(state: State) {
       state.status = 'entered'
+    },
+    bgImageLoadComplete(state) {
+      state.bgImageLoaded = true
+    },
+    fgImageLoadComplete(state) {
+      state.fgImageLoaded = true
     },
   },
 })
@@ -78,6 +91,26 @@ const useStyles = makeStyles((theme) => ({
     height: `calc(100% - ${theme.spacing(1)}px)`,
     position: 'relative',
     zIndex: 2,
+    padding: theme.spacing(2),
+  },
+  fgImage: {
+    filter: `
+      drop-shadow(0 -5px 0 #fff)
+      drop-shadow(0 5px 0 #fff)
+      drop-shadow(-5px 0 0 #fff)
+      drop-shadow(5px 0 0 #fff)`,
+  },
+  loadingWrapper: {
+    width: '100vw',
+    height: '100vh',
+    backgroundColor: '#000',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: 5,
   },
 }))
 
@@ -99,25 +132,47 @@ export const Gallery = ({ gallery }: Props) => {
     slideExited,
     slideExiting,
     slideLoading,
+    bgImageLoadComplete,
+    fgImageLoadComplete,
   } = gallerySlice.actions
+
   const [state, dispatch] = React.useReducer(reducer, initialState)
-  const { currentSlideIndex, nextSlideIndex, direction, status } = state
+  const {
+    currentSlideIndex,
+    bgImageLoaded,
+    fgImageLoaded,
+    direction,
+    status,
+  } = state
   const { images } = gallery
 
   const bgImageWrapperRef: React.RefObject<HTMLDivElement> = React.useRef()
   const bgImageEl = bgImageWrapperRef.current?.firstChild
     ?.childNodes[0] as HTMLImageElement
+
   const fgImageWrapperRef: React.RefObject<HTMLDivElement> = React.useRef()
   const fgImageEl = fgImageWrapperRef.current?.firstChild
     ?.childNodes[0] as HTMLImageElement
 
+  /**
+   * Remove overflow from next/image wrapper
+   */
+  React.useEffect(() => {
+    const fgImageWrapperEl = fgImageWrapperRef.current
+      ?.firstChild as HTMLDivElement
+    if (fgImageWrapperEl) {
+      fgImageWrapperEl.style.cssText = fgImageWrapperEl.style.cssText.replace(
+        'overflow: hidden',
+        ''
+      )
+    }
+  }, [])
+
   const previousSlide = React.useCallback(() => {
-    console.info('dispatch previousSlide')
     dispatch(slideExiting({ direction: 'prev', galleryLength: images.length }))
   }, [images.length, slideExiting])
 
   const nextSlide = React.useCallback(() => {
-    console.info('dispatch nextSlide')
     dispatch(slideExiting({ direction: 'next', galleryLength: images.length }))
   }, [images.length, slideExiting])
 
@@ -161,24 +216,68 @@ export const Gallery = ({ gallery }: Props) => {
     switch (status) {
       case 'exiting': {
         gsap.to(fgImageEl, {
-          x: direction === 'prev' ? '-100vw' : '100vw',
+          x: direction === 'prev' ? '100vw' : '-100vw',
           onComplete() {
             dispatch(slideExited())
           },
         })
+        gsap.to(bgImageEl, { opacity: 0, duration: 1 })
         break
       }
+      case 'exited': {
+        dispatch(slideLoading())
+        break
+      }
+      case 'loading': {
+        if (bgImageLoaded && fgImageLoaded) {
+          dispatch(slideEntering())
+        }
+        break
+      }
+      case 'entering': {
+        gsap.fromTo(
+          fgImageEl,
+          {
+            x: direction === 'prev' ? '-100vw' : '100vw',
+          },
+          {
+            x: 0,
+            duration: 0.4,
+            onComplete() {
+              dispatch(slideEntered())
+            },
+          }
+        )
+        gsap.fromTo(bgImageEl, { opacity: 0 }, { opacity: 1, duration: 1 })
+      }
     }
-  }, [direction, fgImageEl, status, slideExited])
+  }, [
+    bgImageEl,
+    bgImageLoaded,
+    fgImageLoaded,
+    direction,
+    fgImageEl,
+    status,
+    slideExited,
+    slideLoading,
+    slideEntering,
+    slideEntered,
+  ])
 
   return (
     <React.Fragment>
+      {status === 'loading' && (
+        <div className={classes.loadingWrapper}>
+          <img src="/loading.svg" alt="Loading..." />
+        </div>
+      )}
       <div className={classes.bgWrapper} ref={bgImageWrapperRef}>
         <Image
           src={images[currentSlideIndex]}
           layout="fill"
           objectFit="cover"
           objectPosition="center"
+          onLoad={() => dispatch(bgImageLoadComplete())}
           quality="10"
         />
       </div>
@@ -189,6 +288,8 @@ export const Gallery = ({ gallery }: Props) => {
           objectFit="contain"
           objectPosition="center"
           quality="100"
+          className={classes.fgImage}
+          onLoad={() => dispatch(fgImageLoadComplete())}
           priority
         />
       </div>
