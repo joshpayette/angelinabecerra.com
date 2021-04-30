@@ -3,6 +3,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import Image from 'next/image'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import gsap from 'gsap'
+import Swipe from 'react-easy-swipe'
+import { ChevronLeft, ChevronRight } from '@material-ui/icons'
+import clsx from 'clsx'
+import { IconButton } from '@material-ui/core'
 
 interface State {
   currentSlideIndex: number
@@ -76,7 +80,19 @@ const gallerySlice = createSlice({
 })
 
 const useStyles = makeStyles((theme) => ({
-  bgWrapper: {
+  arrow: {
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-25%)',
+    zIndex: 5,
+  },
+  arrowLeft: {
+    left: 0,
+  },
+  arrowRight: {
+    right: 0,
+  },
+  background: {
     position: 'absolute',
     left: 0,
     top: 0,
@@ -86,21 +102,24 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 1,
     filter: 'blur(6px)',
   },
-  fgWrapper: {
-    width: '100%',
-    height: `calc(100% - ${theme.spacing(1)}px)`,
+  slide: {
+    width: 'calc(100vw - 80px)',
+    height: `calc(100vh - ${theme.spacing(6)}px - ${
+      theme.mixins.toolbar.minHeight
+    }px)`,
     position: 'relative',
     zIndex: 2,
     padding: theme.spacing(2),
+    // backgroundColor: '#f00',
   },
-  fgImage: {
+  slideImage: {
     filter: `
       drop-shadow(0 -5px 0 #fff)
       drop-shadow(0 5px 0 #fff)
       drop-shadow(-5px 0 0 #fff)
       drop-shadow(5px 0 0 #fff)`,
   },
-  loadingWrapper: {
+  loading: {
     width: '100vw',
     height: '100vh',
     backgroundColor: '#000',
@@ -111,6 +130,13 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     left: 0,
     zIndex: 5,
+  },
+  track: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    width: '100%',
   },
 }))
 
@@ -155,7 +181,8 @@ export const Gallery = ({ gallery }: Props) => {
     ?.childNodes[0] as HTMLImageElement
 
   /**
-   * Remove overflow from next/image wrapper
+   * Remove overflow from next/image wrapper div
+   * Necessary to get the white border around image to show
    */
   React.useEffect(() => {
     const fgImageWrapperEl = fgImageWrapperRef.current
@@ -171,7 +198,6 @@ export const Gallery = ({ gallery }: Props) => {
   const previousSlide = React.useCallback(() => {
     dispatch(slideExiting({ direction: 'prev', galleryLength: images.length }))
   }, [images.length, slideExiting])
-
   const nextSlide = React.useCallback(() => {
     dispatch(slideExiting({ direction: 'next', galleryLength: images.length }))
   }, [images.length, slideExiting])
@@ -267,11 +293,23 @@ export const Gallery = ({ gallery }: Props) => {
   return (
     <React.Fragment>
       {status === 'loading' && (
-        <div className={classes.loadingWrapper}>
+        <div className={classes.loading}>
           <img src="/loading.svg" alt="Loading..." />
         </div>
       )}
-      <div className={classes.bgWrapper} ref={bgImageWrapperRef}>
+      <IconButton
+        onClick={() => previousSlide()}
+        className={clsx(classes.arrow, classes.arrowLeft)}
+      >
+        <ChevronLeft />
+      </IconButton>
+      <IconButton
+        onClick={() => previousSlide()}
+        className={clsx(classes.arrow, classes.arrowRight)}
+      >
+        <ChevronRight />
+      </IconButton>
+      <div className={classes.background} ref={bgImageWrapperRef}>
         <Image
           src={images[currentSlideIndex]}
           layout="fill"
@@ -281,18 +319,25 @@ export const Gallery = ({ gallery }: Props) => {
           quality="10"
         />
       </div>
-      <div className={classes.fgWrapper} ref={fgImageWrapperRef}>
-        <Image
-          src={images[currentSlideIndex]}
-          layout="fill"
-          objectFit="contain"
-          objectPosition="center"
-          quality="100"
-          className={classes.fgImage}
-          onLoad={() => dispatch(fgImageLoadComplete())}
-          priority
-        />
-      </div>
+      <Swipe
+        onSwipeLeft={() => nextSlide()}
+        onSwipeRight={() => previousSlide()}
+      >
+        <div className={classes.track}>
+          <div className={classes.slide} ref={fgImageWrapperRef}>
+            <Image
+              src={images[currentSlideIndex]}
+              layout="fill"
+              objectFit="contain"
+              objectPosition="center"
+              quality="100"
+              className={classes.slideImage}
+              onLoad={() => dispatch(fgImageLoadComplete())}
+              priority
+            />
+          </div>
+        </div>
+      </Swipe>
     </React.Fragment>
   )
 }
