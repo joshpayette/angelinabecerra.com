@@ -112,7 +112,6 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     width: '100vw',
     height: '100vh',
-    opacity: 0.2,
     zIndex: 1,
     filter: 'blur(6px)',
   },
@@ -120,13 +119,22 @@ const useStyles = makeStyles((theme) => ({
     padding: 0,
     margin: theme.spacing(1),
   },
+  mask: {
+    position: 'absolute',
+    zIndex: 2,
+    left: 0,
+    top: 0,
+    width: '100vw',
+    height: '100vh',
+    backgroundColor: 'rgba(0,0,0,0.8)',
+  },
   slide: {
     width: 'calc(100vw - 80px)',
     height: `calc(100vh - ${theme.spacing(6)}px - ${
       theme.mixins.toolbar.minHeight
     }px)`,
     position: 'relative',
-    zIndex: 2,
+    zIndex: 3,
     padding: theme.spacing(2),
     // backgroundColor: '#f00',
   },
@@ -147,7 +155,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: 0,
     left: 0,
-    zIndex: 5,
+    zIndex: 4,
   },
   track: {
     display: 'flex',
@@ -260,21 +268,29 @@ export const Gallery = ({ gallery }: Props) => {
     switch (status) {
       case 'exiting': {
         console.info('exiting')
-        gsap.to(fgImageWrapperRef.current, {
-          x: direction === 'prev' ? '100vw' : '-100vw',
-          duration: 0.2,
-          onComplete() {
-            dispatch(slideExited())
-          },
-        })
-        gsap.to(bgImageWrapperRef.current, {
-          opacity: 0,
-          duration: 0.2,
-          onComplete: () => {
-            // Animate the new background slide in
-            gsap.to(bgImageWrapperRef.current, { opacity: 0.2, duration: 1 })
-          },
-        })
+        gsap.fromTo(
+          fgImageWrapperRef.current,
+          { x: 0 },
+          {
+            x: direction === 'prev' ? '100vw' : '-100vw',
+            duration: 0.2,
+            onComplete() {
+              dispatch(slideExited())
+            },
+          }
+        )
+        gsap.fromTo(
+          bgImageWrapperRef.current,
+          { opacity: 1 },
+          {
+            opacity: 0,
+            duration: 1,
+            // onComplete: () => {
+            //   // Animate the new background slide in
+            //   gsap.to(bgImageWrapperRef.current, { opacity: 0.2, duration: 1 })
+            // },
+          }
+        )
         break
       }
       case 'exited': {
@@ -289,25 +305,35 @@ export const Gallery = ({ gallery }: Props) => {
           // TODO Delete the below probably
           // Animate the new foreground slide in
           // If next slide is is back, enter left; otherwise enter right
-          gsap.fromTo(
-            fgImageWrapperRef.current,
-            { x: direction === 'prev' ? '-100vw' : '100vw' },
-            { x: 0, duration: 0.2 }
-          )
+          // gsap.fromTo(
+          //   fgImageWrapperRef.current,
+          //   { x: direction === 'prev' ? '-100vw' : '100vw' },
+          //   { x: 0, duration: 0.2 }
+          // )
         }
         break
       }
       case 'entering': {
         console.info('entering')
-        gsap.to(fgImageEl, {
-          x: 0,
-          opacity: 1,
-          duration: 0.4,
-          onComplete() {
-            dispatch(slideEntered())
+        gsap.fromTo(
+          fgImageWrapperRef.current,
+          {
+            x: direction === 'prev' ? '-100vw' : '100vw',
           },
-        })
-        gsap.to(bgImageEl, { opacity: 0.8, duration: 1 })
+          {
+            x: 0,
+            opacity: 1,
+            duration: 0.4,
+            onComplete() {
+              dispatch(slideEntered())
+            },
+          }
+        )
+        gsap.fromTo(
+          bgImageWrapperRef.current,
+          { opacity: 0 },
+          { opacity: 1, duration: 1 }
+        )
       }
     }
   }, [
@@ -354,6 +380,7 @@ export const Gallery = ({ gallery }: Props) => {
           quality="5"
         />
       </div>
+      <div className={classes.mask} />
       <div className={classes.track}>
         <div className={classes.slide} ref={fgImageWrapperRef}>
           <Image
