@@ -9,7 +9,7 @@ export default class MyDocument extends Document {
       <Html lang="en">
         <Head>
           {/* PWA primary color */}
-          <meta name="theme-color" content={theme.palette.primary.main} />
+          <meta name="theme-color" content="#000" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           {/* 
             font-family: 'Inter', sans-serif;
