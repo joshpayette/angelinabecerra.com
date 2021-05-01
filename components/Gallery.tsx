@@ -293,13 +293,15 @@ export const Gallery = ({ folderName, gallery, slideIndex }: Props) => {
       }
       case 'exited': {
         dispatch(slideLoading())
-        router.push(
-          `/gallery/${folderName}/${currentSlideIndex + 1}`,
-          undefined,
-          {
-            shallow: true,
-          }
-        )
+        if (folderName) {
+          router.push(
+            `/gallery/${folderName}/${currentSlideIndex + 1}`,
+            undefined,
+            {
+              shallow: true,
+            }
+          )
+        }
         break
       }
       case 'loading': {

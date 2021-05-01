@@ -33,5 +33,11 @@ const imageList = [
 ]
 
 export default function HomePage() {
-  return <Gallery gallery={{ images: imageList }} />
+  return (
+    <Gallery
+      folderName={null}
+      slideIndex={null}
+      gallery={{ images: imageList }}
+    />
+  )
 }
