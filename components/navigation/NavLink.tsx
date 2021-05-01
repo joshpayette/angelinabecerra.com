@@ -38,11 +38,17 @@ export const NavLink = ({ siteLink }: Props) => {
     setAnchorEl(null)
   }
 
+  if (siteLink.label === 'Home') {
+    return (
+      <MuiLink href={siteLink.path} className={classes.link}>
+        {siteLink.icon}
+      </MuiLink>
+    )
+  }
+
   return siteLink.path ? (
     <Link href={siteLink.path} passHref>
-      <MuiLink className={classes.link}>
-        {siteLink.label === 'Home' ? siteLink.icon : siteLink.label}
-      </MuiLink>
+      <MuiLink className={classes.link}>{siteLink.label}</MuiLink>
     </Link>
   ) : (
     <React.Fragment>
