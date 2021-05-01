@@ -84,14 +84,9 @@ const useStyles = makeStyles((theme) => ({
     fontStyle: 'italic',
   },
   textSection: {
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.spacing(2),
   },
 }))
-
-interface FormValues {
-  email: string
-  message: string
-}
 
 export default function ContactPage() {
   const classes = useStyles()
@@ -172,7 +167,21 @@ export default function ContactPage() {
               <strong>Contact Angelina</strong>
             </Typography>
             <Formik
-              initialValues={{ email: '', message: '' }}
+              initialValues={{
+                email: '',
+                message: '',
+                name: '',
+                organization: '',
+                phone: '',
+              }}
+              validationSchema={Yup.object().shape({
+                name: Yup.string().required('Name is required.'),
+                email: Yup.string()
+                  .required('Email is required.')
+                  .email('Valid email address required.'),
+                phone: Yup.string().required('Phone # is required.'),
+                message: Yup.string().required('Message is required.'),
+              })}
               onSubmit={async (values, actions) => {
                 actions.setSubmitting(true)
                 try {
@@ -192,13 +201,45 @@ export default function ContactPage() {
                 actions.setSubmitting(false)
               }}
             >
-              {({ isValid, isSubmitting, dirty }: FormikProps<FormValues>) => (
+              {({
+                isValid,
+                isSubmitting,
+                dirty,
+              }: FormikProps<ContactRequest>) => (
                 <Form className={classes.form}>
                   <Grid container spacing={2}>
                     <Grid item xs={12}>
                       <Field
+                        name="name"
+                        label="Your Name"
+                        fullWidth
+                        required
+                        component={TextField}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Field
+                        name="organization"
+                        label="Your Company/Organization"
+                        fullWidth
+                        component={TextField}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Field
                         name="email"
                         label="Your E-Mail"
+                        type="email"
+                        fullWidth
+                        required
+                        component={TextField}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Field
+                        name="phone"
+                        label="Your Phone #"
+                        type="tel"
                         fullWidth
                         required
                         component={TextField}
@@ -210,7 +251,7 @@ export default function ContactPage() {
                         label="Your Message"
                         fullWidth
                         multiline
-                        rows={3}
+                        rows={5}
                         required
                         component={TextField}
                       />
