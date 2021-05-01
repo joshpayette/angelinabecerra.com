@@ -1,3 +1,4 @@
 # TODO
 
-- Need to make each image add slug to url
+- Add option for list of galleries
+- Add split column contact page with contact form
