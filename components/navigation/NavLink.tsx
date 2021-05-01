@@ -8,6 +8,7 @@ import clsx from 'clsx'
 const useStyles = makeStyles((theme) => ({
   button: {
     padding: 0,
+    alignItems: 'flex-start',
   },
   link: {
     fontSize: '1.2rem',
