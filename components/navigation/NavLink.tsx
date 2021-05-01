@@ -37,7 +37,9 @@ export const NavLink = ({ siteLink }: Props) => {
 
   return siteLink.path ? (
     <Link href={siteLink.path} passHref>
-      <MuiLink className={classes.link}>{siteLink.label}</MuiLink>
+      <MuiLink className={classes.link}>
+        {siteLink.label === 'Home' ? siteLink.icon : siteLink.label}
+      </MuiLink>
     </Link>
   ) : (
     <React.Fragment>

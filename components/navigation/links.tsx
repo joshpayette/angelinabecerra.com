@@ -5,8 +5,14 @@ import {
 } from '@material-ui/icons'
 import * as React from 'react'
 import { SiteLinkType } from 'types'
+import { Home as HomeIcon } from '@material-ui/icons'
 
 export const siteLinks: SiteLinkType[] = [
+  {
+    icon: <HomeIcon />,
+    label: 'Home',
+    path: '/',
+  },
   {
     icon: <CameraIcon />,
     label: 'About',

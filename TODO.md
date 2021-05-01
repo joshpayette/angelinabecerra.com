@@ -1,3 +1,4 @@
-- Convert logo font to image for better loading
-  - Alternatively, hook into font load?
--
+# TODO
+
+- Portfolio menu should be below portfolio link.
+- Need to make each image add slug to url
