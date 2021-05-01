@@ -1,5 +1,6 @@
 import { Gallery } from 'components/Gallery'
 import * as React from 'react'
+import { useRouter } from 'next/router'
 
 const imageList = [
   '/galleries/protest-and-unrest/1.JPG',
@@ -33,10 +34,23 @@ const imageList = [
 ]
 
 export default function HomePage() {
+  const router = useRouter()
+  const { query } = router
+  const slideIndexParam = query.slideIndex ?? null
+
+  let slideIndex: string[]
+  if (!slideIndexParam) {
+    slideIndex = ['1']
+  } else {
+    slideIndex = Array.isArray(slideIndexParam)
+      ? slideIndexParam
+      : [slideIndexParam]
+  }
+
   return (
     <Gallery
       folderName={null}
-      slideIndex={null}
+      slideIndex={slideIndex}
       gallery={{ images: imageList }}
     />
   )

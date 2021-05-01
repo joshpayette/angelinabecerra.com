@@ -26,6 +26,12 @@ const gallerySlice = createSlice({
   name: 'gallerySlice',
   initialState,
   reducers: {
+    initializeCurrentSlide(
+      state: State,
+      action: PayloadAction<{ slideIndex: number }>
+    ) {
+      state.currentSlideIndex = action.payload.slideIndex
+    },
     slideExiting(
       state: State,
       action: PayloadAction<{
@@ -203,6 +209,7 @@ export const Gallery = ({ folderName, gallery, slideIndex }: Props) => {
   const slideIndexParam = slideIndex ? parseInt(slideIndex[0], 10) : 1
   const { reducer } = gallerySlice
   const {
+    initializeCurrentSlide,
     slideEntered,
     slideEntering,
     slideExited,
@@ -213,8 +220,9 @@ export const Gallery = ({ folderName, gallery, slideIndex }: Props) => {
 
   const [state, dispatch] = React.useReducer(reducer, {
     ...initialState,
-    currentSlideIndex: slideIndexParam - 1 ?? 0,
+    currentSlideIndex: slideIndexParam - 1,
   })
+
   const { currentSlideIndex, fgImageLoaded, direction, status } = state
   const { images } = gallery
 
@@ -231,6 +239,13 @@ export const Gallery = ({ folderName, gallery, slideIndex }: Props) => {
   const nextSlide = React.useCallback(() => {
     dispatch(slideExiting({ direction: 'next', galleryLength: images.length }))
   }, [images.length, slideExiting])
+
+  React.useEffect(() => {
+    if (!slideIndexParam) {
+      return
+    }
+    dispatch(initializeCurrentSlide({ slideIndex: slideIndexParam - 1 }))
+  }, [slideIndexParam, initializeCurrentSlide])
 
   /**
    * Event listeners
@@ -301,6 +316,8 @@ export const Gallery = ({ folderName, gallery, slideIndex }: Props) => {
               shallow: true,
             }
           )
+        } else {
+          router.push(`/${currentSlideIndex + 1}`, undefined, { shallow: true })
         }
         break
       }
