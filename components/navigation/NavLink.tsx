@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'none',
     margin: theme.spacing(0, 3),
   },
+  popover: {
+    marginTop: theme.spacing(6),
+  },
 }))
 
 interface Props {
@@ -49,6 +52,7 @@ export const NavLink = ({ siteLink }: Props) => {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
+        PopoverClasses={{ paper: classes.popover }}
       >
         {siteLink.childLinks.map((childLink) => (
           <MenuItem button={false} key={childLink.label}>
