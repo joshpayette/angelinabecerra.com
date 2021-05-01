@@ -6,6 +6,7 @@ import Swipe from 'react-easy-swipe'
 import { ChevronLeft, ChevronRight } from '@material-ui/icons'
 import clsx from 'clsx'
 import { IconButton } from '@material-ui/core'
+import { useRouter } from 'next/router'
 
 interface State {
   currentSlideIndex: number
@@ -191,12 +192,15 @@ export interface GalleryType {
 }
 
 interface Props {
+  folderName: string
   gallery: GalleryType
+  slideIndex: string[]
 }
 
-export const Gallery = ({ gallery }: Props) => {
+export const Gallery = ({ folderName, gallery, slideIndex }: Props) => {
   const classes = useStyles()
-
+  const router = useRouter()
+  const slideIndexParam = slideIndex ? parseInt(slideIndex[0], 10) : 1
   const { reducer } = gallerySlice
   const {
     slideEntered,
@@ -207,7 +211,10 @@ export const Gallery = ({ gallery }: Props) => {
     fgImageLoadComplete,
   } = gallerySlice.actions
 
-  const [state, dispatch] = React.useReducer(reducer, initialState)
+  const [state, dispatch] = React.useReducer(reducer, {
+    ...initialState,
+    currentSlideIndex: slideIndexParam - 1 ?? 0,
+  })
   const { currentSlideIndex, fgImageLoaded, direction, status } = state
   const { images } = gallery
 
@@ -286,6 +293,13 @@ export const Gallery = ({ gallery }: Props) => {
       }
       case 'exited': {
         dispatch(slideLoading())
+        router.push(
+          `/gallery/${folderName}/${currentSlideIndex + 1}`,
+          undefined,
+          {
+            shallow: true,
+          }
+        )
         break
       }
       case 'loading': {
@@ -326,6 +340,9 @@ export const Gallery = ({ gallery }: Props) => {
     slideLoading,
     slideEntering,
     slideEntered,
+    currentSlideIndex,
+    folderName,
+    router,
   ])
 
   return (
