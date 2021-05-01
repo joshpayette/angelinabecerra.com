@@ -22,7 +22,8 @@ export async function getStaticPaths() {
 
   const paths = folders
     .map((folder) => {
-      const imageCount = fs.readdirSync(`./public/galleries/${folder}`).length
+      const imageCount =
+        fs.readdirSync(`./public/galleries/${folder}`)?.length ?? 0
       /** Add path for no slideIndex */
       const paths = [{ params: { folderName: folder, slideIndex: [] } }]
       /** Add path for each index */
