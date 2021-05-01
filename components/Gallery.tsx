@@ -175,7 +175,7 @@ const useStyles = makeStyles((theme) => ({
     border: 0,
     padding: 0,
     cursor: 'pointer',
-    backgroundColor: 'black',
+    backgroundColor: 'transparent',
   },
   iconButton: {
     padding: 0,
@@ -271,7 +271,25 @@ export const Gallery = ({ folderName, gallery, slideIndex }: Props) => {
   const [galleryDialogOpen, setGalleryDialogOpen] = React.useState(false)
   const closeGalleryDialog = () => setGalleryDialogOpen(false)
   const theme = useTheme()
-  const gridListLarge = useMediaQuery(theme.breakpoints.up('md'))
+  /**
+   * Used for GridList to determine column count and size
+   */
+  const screenXs = useMediaQuery(theme.breakpoints.only('xs'))
+  const screenSm = useMediaQuery(theme.breakpoints.only('sm'))
+  const screenMd = useMediaQuery(theme.breakpoints.only('md'))
+  const screenLg = useMediaQuery(theme.breakpoints.up('lg'))
+  const getGridListCols = () => {
+    if (screenXs) {
+      return 1
+    }
+    if (screenSm) {
+      return 2
+    }
+    if (screenMd) {
+      return 3
+    }
+    return 4
+  }
 
   const slideIndexParam = slideIndex ? parseInt(slideIndex[0], 10) : 1
   const { images } = gallery
@@ -451,9 +469,9 @@ export const Gallery = ({ folderName, gallery, slideIndex }: Props) => {
         <DialogTitle onClose={closeGalleryDialog}>Gallery Images</DialogTitle>
         <DialogContent>
           <GridList
-            cellHeight={360}
+            cellHeight={500}
             className={classes.gridList}
-            cols={gridListLarge ? 3 : 1}
+            cols={getGridListCols()}
           >
             {images.map((image, index) => (
               <GridListTile
