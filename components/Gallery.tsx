@@ -141,7 +141,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(0),
     [theme.breakpoints.up('md')]: {
       width: 'calc(100vw - 100px)',
       height: `calc(100vh - ${theme.spacing(10)}px - ${

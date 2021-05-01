@@ -24,8 +24,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   '@global': {
+    html: {
+      height: '100%',
+    },
     body: {
-      height: '100vh',
+      height: '100%',
     },
     '#__next': {
       height: '100%',

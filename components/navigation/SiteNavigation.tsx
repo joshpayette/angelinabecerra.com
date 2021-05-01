@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: 'auto',
     maxHeight: 70,
-    padding: theme.spacing(2, 0, 1, 0),
+    padding: theme.spacing(2, 0, 0, 0),
     [theme.breakpoints.up('md')]: {
       width: '100%',
       height: 'auto',
