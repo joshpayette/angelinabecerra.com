@@ -8,7 +8,9 @@ export const theme = responsiveFontSizes(
         default: '#000',
         paper: '#101010',
       },
-      primary: blue,
+      primary: {
+        main: '#fff',
+      },
       secondary: red,
       type: 'dark',
     },
