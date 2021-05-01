@@ -1,11 +1,30 @@
 import * as React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import gsap from 'gsap'
 import Swipe from 'react-easy-swipe'
-import { ChevronLeft, ChevronRight } from '@material-ui/icons'
+import {
+  ChevronLeft,
+  ChevronRight,
+  Close as CloseIcon,
+  PhotoAlbum as PhotoAlbumIcon,
+} from '@material-ui/icons'
 import clsx from 'clsx'
-import { IconButton } from '@material-ui/core'
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle as MuiDialogTitle,
+  Grid,
+  GridList,
+  GridListTile,
+  IconButton,
+  DialogTitleProps,
+  Typography,
+  useMediaQuery,
+} from '@material-ui/core'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 
 interface State {
@@ -31,6 +50,10 @@ const gallerySlice = createSlice({
       action: PayloadAction<{ slideIndex: number }>
     ) {
       state.currentSlideIndex = action.payload.slideIndex
+    },
+    goToSlide(state: State, action: PayloadAction<{ slideIndex: number }>) {
+      state.nextSlideIndex = action.payload.slideIndex
+      state.status = 'exiting'
     },
     slideExiting(
       state: State,
@@ -80,15 +103,30 @@ const gallerySlice = createSlice({
 })
 
 const useStyles = makeStyles((theme) => ({
-  arrow: {
+  actionsWrapper: {
     position: 'absolute',
-    top: `calc((100vh - ${theme.mixins.toolbar.minHeight}px) / 2)`,
-    transform: 'translateY(50%)',
-    zIndex: 5,
+    width: 'calc(100vw - 50px)',
+    left: '50%',
+    bottom: 0,
+    transform: 'translateX(-50%)',
+    zIndex: 4,
     display: 'flex',
     alignItems: 'center',
-    width: '40px!important',
-    height: '40px!important',
+    justifyContent: 'center',
+    [theme.breakpoints.up('md')]: {
+      width: 'calc(100vw - 100px)',
+    },
+    // backgroundColor: '#0f0',
+  },
+  arrow: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  arrowLeftWrapper: {
+    justifyContent: 'flex-end',
+  },
+  arrowRightWrapper: {
+    justifyContent: 'flex-start',
   },
   arrowLeft: {
     left: 0,
@@ -99,12 +137,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
   },
   arrowIcon: {
-    width: '20px!important',
-    height: '20px!important',
-    [theme.breakpoints.up('md')]: {
-      width: '40px!important',
-      height: '40px!important',
-    },
+    width: '40px!important',
+    height: '40px!important',
   },
   background: {
     position: 'absolute',
@@ -122,6 +156,26 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
+  },
+  dialogRoot: {
+    margin: 0,
+    padding: theme.spacing(2),
+  },
+  dialogCloseButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+  },
+  gridList: {
+    width: '100%',
+    height: '100%',
+  },
+  gridListTile: {
+    border: 0,
+    padding: 0,
+    cursor: 'pointer',
+    backgroundColor: 'black',
   },
   iconButton: {
     padding: 0,
@@ -156,14 +210,6 @@ const useStyles = makeStyles((theme) => ({
     },
     // backgroundColor: '#f00',
   },
-  '@media (orientation: landscape) and (max-height: 500px)': {
-    slide: {
-      height: `calc(100vh - ${theme.spacing(2)}px - ${
-        theme.mixins.toolbar.minHeight
-      }px)`,
-      marginTop: 0,
-    },
-  },
   slideImage: {
     border: `5px solid #fff`,
     position: 'absolute',
@@ -172,24 +218,39 @@ const useStyles = makeStyles((theme) => ({
     boxShadow:
       '0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22)',
   },
-  loading: {
-    width: '100vw',
-    height: '100vh',
-    backgroundColor: '#000',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    zIndex: 4,
-  },
   track: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
     width: '100%',
+    marginBottom: theme.spacing(2),
+  },
+  '@media (orientation: landscape) and (max-height: 500px)': {
+    slide: {
+      height: `calc(100vh - ${theme.spacing(6)}px - ${
+        theme.mixins.toolbar.minHeight
+      }px)`,
+      marginTop: 0,
+    },
+    actionsWrapper: {
+      position: 'absolute',
+      left: 0,
+      top: `calc(50% + 35px)`,
+      width: 'auto',
+      transform: 'translateY(-50%)',
+      flexDirection: 'column',
+      backgroundColor: 'rgba(0,0,0,0.6)',
+    },
+    arrow: {
+      margin: 0,
+    },
+    arrowLeftWrapper: {
+      justifyContent: 'center',
+    },
+    arrowRightWrapper: {
+      justifyContent: 'center',
+    },
   },
 }))
 
@@ -206,9 +267,18 @@ interface Props {
 export const Gallery = ({ folderName, gallery, slideIndex }: Props) => {
   const classes = useStyles()
   const router = useRouter()
+
+  const [galleryDialogOpen, setGalleryDialogOpen] = React.useState(false)
+  const closeGalleryDialog = () => setGalleryDialogOpen(false)
+  const theme = useTheme()
+  const gridListLarge = useMediaQuery(theme.breakpoints.up('md'))
+
   const slideIndexParam = slideIndex ? parseInt(slideIndex[0], 10) : 1
+  const { images } = gallery
+
   const { reducer } = gallerySlice
   const {
+    goToSlide,
     initializeCurrentSlide,
     slideEntered,
     slideEntering,
@@ -222,9 +292,7 @@ export const Gallery = ({ folderName, gallery, slideIndex }: Props) => {
     ...initialState,
     currentSlideIndex: slideIndexParam - 1,
   })
-
   const { currentSlideIndex, fgImageLoaded, direction, status } = state
-  const { images } = gallery
 
   const bgImageWrapperRef: React.RefObject<HTMLDivElement> = React.useRef()
   const bgImageEl = bgImageWrapperRef.current?.firstChild
@@ -236,10 +304,18 @@ export const Gallery = ({ folderName, gallery, slideIndex }: Props) => {
   const previousSlide = React.useCallback(() => {
     dispatch(slideExiting({ direction: 'prev', galleryLength: images.length }))
   }, [images.length, slideExiting])
+
   const nextSlide = React.useCallback(() => {
     dispatch(slideExiting({ direction: 'next', galleryLength: images.length }))
   }, [images.length, slideExiting])
 
+  const onGridListTileClick = (slideIndex: number) => {
+    dispatch(goToSlide({ slideIndex }))
+  }
+
+  /**
+   * Initialize current slide based on passed prop
+   */
   React.useEffect(() => {
     if (!slideIndexParam) {
       return
@@ -365,40 +441,121 @@ export const Gallery = ({ folderName, gallery, slideIndex }: Props) => {
   ])
 
   return (
-    <Swipe onSwipeLeft={() => nextSlide()} onSwipeRight={() => previousSlide()}>
-      <IconButton
-        onClick={() => previousSlide()}
-        className={clsx(classes.arrow, classes.arrowLeft, classes.iconButton)}
-        edge="start"
+    <React.Fragment>
+      <Dialog
+        fullScreen
+        open={galleryDialogOpen}
+        onClick={closeGalleryDialog}
+        onClose={closeGalleryDialog}
       >
-        <ChevronLeft className={classes.arrowIcon} />
-      </IconButton>
-      <IconButton
-        onClick={() => nextSlide()}
-        className={clsx(classes.arrow, classes.arrowRight, classes.iconButton)}
-        edge="end"
+        <DialogTitle onClose={closeGalleryDialog}>Gallery Images</DialogTitle>
+        <DialogContent>
+          <GridList
+            cellHeight={360}
+            className={classes.gridList}
+            cols={gridListLarge ? 3 : 1}
+          >
+            {images.map((image, index) => (
+              <GridListTile
+                key={image}
+                cols={1}
+                onClick={() => onGridListTileClick(index)}
+                component="button"
+                className={classes.gridListTile}
+              >
+                <Image
+                  src={image}
+                  alt={`Gallery image #${index}`}
+                  layout="fill"
+                  objectFit="cover"
+                  objectPosition="center"
+                />
+              </GridListTile>
+            ))}
+          </GridList>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="text" color="inherit" type="button">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Swipe
+        onSwipeLeft={() => nextSlide()}
+        onSwipeRight={() => previousSlide()}
       >
-        <ChevronRight className={classes.arrowIcon} />
-      </IconButton>
-      <div className={classes.background} ref={bgImageWrapperRef}>
-        <div
-          className={classes.bgImage}
-          style={{
-            backgroundImage: `url(${images[currentSlideIndex]})`,
-          }}
-        />
-      </div>
-      <div className={classes.mask} />
-      <div className={classes.track}>
-        <div className={classes.slide} ref={fgImageWrapperRef}>
-          <img
-            src={images[currentSlideIndex]}
-            className={classes.slideImage}
-            ref={fgImageRef}
-            onLoad={() => dispatch(fgImageLoadComplete())}
+        <div className={classes.background} ref={bgImageWrapperRef}>
+          <div
+            className={classes.bgImage}
+            style={{
+              backgroundImage: `url(${images[currentSlideIndex]})`,
+            }}
           />
         </div>
-      </div>
-    </Swipe>
+        <div className={classes.mask} />
+        <div className={classes.track}>
+          <div className={classes.slide} ref={fgImageWrapperRef}>
+            <img
+              src={images[currentSlideIndex]}
+              className={classes.slideImage}
+              ref={fgImageRef}
+              onLoad={() => dispatch(fgImageLoadComplete())}
+            />
+          </div>
+        </div>
+        <Grid container className={classes.actionsWrapper}>
+          <Grid item container xs className={classes.arrowLeftWrapper}>
+            <IconButton
+              onClick={() => previousSlide()}
+              className={clsx(
+                classes.arrow,
+                classes.arrowLeft,
+                classes.iconButton
+              )}
+              edge="start"
+            >
+              <ChevronLeft className={classes.arrowIcon} />
+            </IconButton>
+          </Grid>
+          <Grid item container justify="center" xs>
+            <IconButton onClick={() => setGalleryDialogOpen(true)}>
+              <PhotoAlbumIcon />
+            </IconButton>
+          </Grid>
+          <Grid item container xs className={classes.arrowRightWrapper}>
+            <IconButton
+              onClick={() => nextSlide()}
+              className={clsx(
+                classes.arrow,
+                classes.arrowRight,
+                classes.iconButton
+              )}
+              edge="end"
+            >
+              <ChevronRight className={classes.arrowIcon} />
+            </IconButton>
+          </Grid>
+        </Grid>
+      </Swipe>
+    </React.Fragment>
+  )
+}
+
+const DialogTitle = (props: DialogTitleProps & { onClose(): void }) => {
+  const classes = useStyles()
+  const { children, onClose, ...other } = props
+  return (
+    <MuiDialogTitle disableTypography className={classes.dialogRoot} {...other}>
+      <Typography variant="h6">{children}</Typography>
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          className={classes.dialogCloseButton}
+          onClick={onClose}
+        >
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
   )
 }
