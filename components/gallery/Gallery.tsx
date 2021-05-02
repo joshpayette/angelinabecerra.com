@@ -505,6 +505,9 @@ export const Gallery = ({
             className={classes.slide}
             ref={fgImageWrapperRef}
             style={{ backgroundColor: 'transparent', cursor: 'default' }}
+            disableFocusRipple
+            disableTouchRipple
+            disableRipple
           >
             <img
               src={images[currentSlideIndex].filename}
