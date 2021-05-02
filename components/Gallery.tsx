@@ -365,6 +365,10 @@ export const Gallery = ({
   }, [images.length, slideExiting, status])
 
   const onGridListTileClick = (slideIndex: number) => {
+    if (slideIndex === currentSlideIndex) {
+      setGalleryDialogOpen(false)
+      return
+    }
     dispatch(goToSlide({ slideIndex }))
   }
 
