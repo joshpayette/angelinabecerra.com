@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     main: {
       height: `calc(100% - ${
         theme.mixins.toolbar.minHeight
-      }px - ${theme.spacing(3)}px)`,
+      }px - ${theme.spacing(1)}px)`,
       overflowY: 'scroll',
     },
   },

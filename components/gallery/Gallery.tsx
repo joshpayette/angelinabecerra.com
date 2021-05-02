@@ -200,7 +200,6 @@ const useStyles = makeStyles((theme) => ({
         theme.mixins.toolbar.minHeight
       }px)`,
     },
-    backgroundColor: '#f00',
   },
   slideImage: {
     border: `5px solid #fff`,
@@ -217,10 +216,13 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     width: '100%',
     marginBottom: theme.spacing(2),
+    // backgroundColor: '#f00',
+    position: 'absolute',
+    zIndex: 3,
   },
   '@media (orientation: landscape) and (max-height: 500px)': {
     slide: {
-      height: `calc(100% - ${theme.spacing(6)}px - ${
+      height: `calc(100% - ${theme.spacing(2)}px - ${
         theme.mixins.toolbar.minHeight
       }px)`,
       marginTop: 0,
