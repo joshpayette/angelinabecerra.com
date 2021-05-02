@@ -1,11 +1,11 @@
 {
   "images": [
-    { "filename": "5.jpg"},
-    { "filename": "7.jpg"},
-    { "filename": "8.jpg"},
-    { "filename": "12.jpg"},
-    { "filename": "13.jpg"},
-    { "filename": "14.jpg"},
-    { "filename": "15.jpg"}
+    { "filename": "5.jpg" },
+    { "filename": "7.jpg", "backgroundPosition": "center top" },
+    { "filename": "8.jpg" },
+    { "filename": "12.jpg" },
+    { "filename": "13.jpg" },
+    { "filename": "14.jpg" },
+    { "filename": "15.jpg" }
   ]
 }
