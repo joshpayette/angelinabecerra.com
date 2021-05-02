@@ -28,6 +28,7 @@ import {
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { TouchApp as TouchAppIcon } from '@material-ui/icons'
+import { useReduceMotion } from 'hooks/use-reduced-motion'
 
 interface State {
   currentSlideIndex: number
@@ -299,10 +300,12 @@ export const Gallery = ({
 }: Props) => {
   const classes = useStyles()
   const router = useRouter()
+  const theme = useTheme()
+  const prefersReducedMotion = useReduceMotion()
 
   const [galleryDialogOpen, setGalleryDialogOpen] = React.useState(false)
   const closeGalleryDialog = () => setGalleryDialogOpen(false)
-  const theme = useTheme()
+
   /**
    * Used for GridList to determine column count and size
    */
@@ -423,17 +426,29 @@ export const Gallery = ({
     }
     switch (status) {
       case 'exiting': {
-        gsap.fromTo(
-          fgImageWrapperRef.current,
-          { x: 0 },
-          {
-            x: direction === 'prev' ? '100vw' : '-100vw',
-            duration: 0.2,
-            onComplete() {
-              dispatch(slideExited())
-            },
-          }
-        )
+        prefersReducedMotion
+          ? gsap.fromTo(
+              fgImageWrapperRef.current,
+              { opacity: 1 },
+              {
+                opacity: 0,
+                duration: 0.2,
+                onComplete() {
+                  dispatch(slideExited())
+                },
+              }
+            )
+          : gsap.fromTo(
+              fgImageWrapperRef.current,
+              { x: 0 },
+              {
+                x: direction === 'prev' ? '100vw' : '-100vw',
+                duration: 0.2,
+                onComplete() {
+                  dispatch(slideExited())
+                },
+              }
+            )
         gsap.fromTo(
           bgImageWrapperRef.current,
           { opacity: 1 },
@@ -466,20 +481,34 @@ export const Gallery = ({
         break
       }
       case 'entering': {
-        gsap.fromTo(
-          fgImageWrapperRef.current,
-          {
-            x: direction === 'prev' ? '-100vw' : '100vw',
-          },
-          {
-            x: 0,
-            opacity: 1,
-            duration: 0.2,
-            onComplete() {
-              dispatch(slideEntered())
-            },
-          }
-        )
+        prefersReducedMotion
+          ? gsap.fromTo(
+              fgImageWrapperRef.current,
+              {
+                opacity: 0,
+              },
+              {
+                opacity: 1,
+                duration: 0.2,
+                onComplete() {
+                  dispatch(slideEntered())
+                },
+              }
+            )
+          : gsap.fromTo(
+              fgImageWrapperRef.current,
+              {
+                x: direction === 'prev' ? '-100vw' : '100vw',
+              },
+              {
+                x: 0,
+                opacity: 1,
+                duration: 0.2,
+                onComplete() {
+                  dispatch(slideEntered())
+                },
+              }
+            )
         gsap.fromTo(
           bgImageWrapperRef.current,
           { opacity: 0 },
@@ -489,17 +518,18 @@ export const Gallery = ({
     }
   }, [
     bgImageEl,
+    currentSlideIndex,
+    folderName,
     fgImageLoaded,
     direction,
     fgImageRef,
+    prefersReducedMotion,
+    router,
     status,
     slideExited,
     slideLoading,
     slideEntering,
     slideEntered,
-    currentSlideIndex,
-    folderName,
-    router,
   ])
 
   return (
