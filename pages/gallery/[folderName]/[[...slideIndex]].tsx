@@ -1,26 +1,8 @@
 import { GetStaticPropsContext } from 'next'
 import * as React from 'react'
 import fs from 'fs'
-import { Gallery } from 'components/Gallery'
-
-/**
- * Shape of the parsed JSON data for a config.json
- */
-interface GalleryConfig {
-  images: {
-    filename: string
-    backgroundPosition?:
-      | 'left top'
-      | 'left center'
-      | 'left bottom'
-      | 'right top'
-      | 'right center'
-      | 'right bottom'
-      | 'center top'
-      | 'center center'
-      | 'center bottom'
-  }[]
-}
+import { Gallery } from 'components/gallery'
+import { GalleryConfig } from 'components/gallery/Gallery'
 
 const galleries = [
   { folder: 'event-photography', name: 'Event Photography' },

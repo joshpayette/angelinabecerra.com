@@ -1,4 +1,4 @@
-import { Gallery } from 'components/Gallery'
+import { Gallery } from 'components/gallery'
 import * as React from 'react'
 import { useRouter } from 'next/router'
 

@@ -1,34 +1,37 @@
 import * as React from 'react'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import gsap from 'gsap'
 import Swipe from 'react-easy-swipe'
 import {
   ChevronLeft,
   ChevronRight,
-  Close as CloseIcon,
   PhotoAlbum as PhotoAlbumIcon,
 } from '@material-ui/icons'
 import clsx from 'clsx'
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle as MuiDialogTitle,
-  Grid,
-  GridList,
-  GridListTile,
-  IconButton,
-  DialogTitleProps,
-  Typography,
-  useMediaQuery,
-  Hidden,
-} from '@material-ui/core'
-import Image from 'next/image'
+import { Grid, IconButton } from '@material-ui/core'
 import { useRouter } from 'next/router'
-import { TouchApp as TouchAppIcon } from '@material-ui/icons'
 import { useReduceMotion } from 'hooks/use-reduced-motion'
+import { GalleryView } from './GalleryView'
+
+/**
+ * Shape of the parsed JSON data for a config.json
+ */
+export interface GalleryConfig {
+  images: {
+    filename: string
+    backgroundPosition?:
+      | 'left top'
+      | 'left center'
+      | 'left bottom'
+      | 'right top'
+      | 'right center'
+      | 'right bottom'
+      | 'center top'
+      | 'center center'
+      | 'center bottom'
+  }[]
+}
 
 interface State {
   currentSlideIndex: number
@@ -160,35 +163,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
   },
-  dialogActionsTextWrapper: {
-    flexGrow: 1,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  dialogRoot: {
-    margin: 0,
-    padding: theme.spacing(2),
-  },
-  dialogCloseButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
-  dialogSubtitle: {
-    color: theme.palette.grey[400],
-  },
-  gridList: {
-    width: '100%',
-    height: '100%',
-  },
-  gridListTile: {
-    border: 0,
-    padding: 0,
-    cursor: 'pointer',
-    backgroundColor: 'transparent',
-  },
   iconButton: {
     padding: 0,
     margin: theme.spacing(1),
@@ -230,9 +204,6 @@ const useStyles = makeStyles((theme) => ({
     boxShadow:
       '0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22)',
   },
-  touchAppIcon: {
-    marginRight: theme.spacing(1),
-  },
   track: {
     display: 'flex',
     alignItems: 'center',
@@ -269,26 +240,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export interface GalleryType {
-  images: {
-    filename: string
-    backgroundPosition?:
-      | 'left top'
-      | 'left center'
-      | 'left bottom'
-      | 'right top'
-      | 'right center'
-      | 'right bottom'
-      | 'center top'
-      | 'center center'
-      | 'center bottom'
-  }[]
-}
-
 interface Props {
   folderName: string
   galleryName: string
-  gallery: GalleryType
+  gallery: GalleryConfig
   slideIndex: string[]
 }
 
@@ -300,30 +255,10 @@ export const Gallery = ({
 }: Props) => {
   const classes = useStyles()
   const router = useRouter()
-  const theme = useTheme()
   const prefersReducedMotion = useReduceMotion()
 
   const [galleryDialogOpen, setGalleryDialogOpen] = React.useState(false)
   const closeGalleryDialog = () => setGalleryDialogOpen(false)
-
-  /**
-   * Used for GridList to determine column count and size
-   */
-  const screenXs = useMediaQuery(theme.breakpoints.only('xs'))
-  const screenSm = useMediaQuery(theme.breakpoints.only('sm'))
-  const screenMd = useMediaQuery(theme.breakpoints.only('md'))
-  const getGridListCols = () => {
-    if (screenXs) {
-      return 1
-    }
-    if (screenSm) {
-      return 2
-    }
-    if (screenMd) {
-      return 3
-    }
-    return 4
-  }
 
   const slideIndexParam = slideIndex ? parseInt(slideIndex[0], 10) : 1
   const { images } = gallery
@@ -352,21 +287,27 @@ export const Gallery = ({
 
   const fgImageWrapperRef: React.RefObject<HTMLDivElement> = React.useRef()
   const fgImageRef: React.RefObject<HTMLImageElement> = React.useRef()
-
+  /**
+   * Kicks off the previous slide transition
+   */
   const previousSlide = React.useCallback(() => {
     if (status !== 'entered') {
       return
     }
     dispatch(slideExiting({ direction: 'prev', galleryLength: images.length }))
   }, [images.length, slideExiting, status])
-
+  /**
+   * Kicks off the next slide transition
+   */
   const nextSlide = React.useCallback(() => {
     if (status !== 'entered') {
       return
     }
     dispatch(slideExiting({ direction: 'next', galleryLength: images.length }))
   }, [images.length, slideExiting, status])
-
+  /**
+   * Handles an image clicked in the GalleryView component
+   */
   const onGridListTileClick = (slideIndex: number) => {
     if (slideIndex === currentSlideIndex) {
       setGalleryDialogOpen(false)
@@ -374,9 +315,8 @@ export const Gallery = ({
     }
     dispatch(goToSlide({ slideIndex }))
   }
-
   /**
-   * Initialize current slide based on passed prop
+   * Initialize current slide based on prop
    */
   React.useEffect(() => {
     if (!slideIndexParam) {
@@ -384,7 +324,6 @@ export const Gallery = ({
     }
     dispatch(initializeCurrentSlide({ slideIndex: slideIndexParam - 1 }))
   }, [slideIndexParam, initializeCurrentSlide])
-
   /**
    * Event listeners
    */
@@ -418,7 +357,7 @@ export const Gallery = ({
   }, [nextSlide, previousSlide, status])
 
   /**
-   * Manage animation states
+   * Manage lifecycle states and animations
    */
   React.useEffect(() => {
     if (!fgImageWrapperRef.current || !bgImageWrapperRef.current) {
@@ -426,6 +365,9 @@ export const Gallery = ({
     }
     switch (status) {
       case 'exiting': {
+        /**
+         * Transitions set to opacity if user prefers reduced motion.
+         */
         prefersReducedMotion
           ? gsap.fromTo(
               fgImageWrapperRef.current,
@@ -481,6 +423,9 @@ export const Gallery = ({
         break
       }
       case 'entering': {
+        /**
+         * Transitions set to opacity if user prefers reduced motion.
+         */
         prefersReducedMotion
           ? gsap.fromTo(
               fgImageWrapperRef.current,
@@ -534,64 +479,13 @@ export const Gallery = ({
 
   return (
     <React.Fragment>
-      <Dialog
-        fullScreen
+      <GalleryView
+        galleryName={galleryName}
+        images={images}
         open={galleryDialogOpen}
-        onClick={closeGalleryDialog}
         onClose={closeGalleryDialog}
-      >
-        <DialogTitle onClose={closeGalleryDialog}>
-          {galleryName ? `${galleryName} Images` : 'Gallery Images'}
-          <Typography
-            variant="body2"
-            component="div"
-            color="inherit"
-            className={classes.dialogSubtitle}
-          >
-            Photos by Angelina Becerra, &copy;{new Date().getFullYear()}
-          </Typography>
-        </DialogTitle>
-        <DialogContent>
-          <GridList
-            cellHeight={500}
-            className={classes.gridList}
-            cols={getGridListCols()}
-          >
-            {images.map((image, index) => (
-              <GridListTile
-                key={image.filename}
-                cols={1}
-                onClick={() => onGridListTileClick(index)}
-                component="button"
-                className={classes.gridListTile}
-              >
-                <Image
-                  src={image.filename}
-                  alt={`Gallery image #${index}`}
-                  layout="fill"
-                  objectFit="cover"
-                  objectPosition="center"
-                />
-              </GridListTile>
-            ))}
-          </GridList>
-        </DialogContent>
-        <DialogActions>
-          <Hidden smUp>
-            <div className={classes.dialogActionsTextWrapper}>
-              <TouchAppIcon className={classes.touchAppIcon} />
-              <Typography variant="body2" component="div" color="inherit">
-                Click to go to slide
-                <br />
-                Scroll for more images
-              </Typography>
-            </div>
-          </Hidden>
-          <Button variant="text" color="inherit" type="button">
-            Close Gallery View
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onTileClick={onGridListTileClick}
+      />
       <Swipe
         onSwipeLeft={() => nextSlide()}
         onSwipeRight={() => previousSlide()}
@@ -650,26 +544,5 @@ export const Gallery = ({
         </Grid>
       </Swipe>
     </React.Fragment>
-  )
-}
-
-const DialogTitle = (props: DialogTitleProps & { onClose(): void }) => {
-  const classes = useStyles()
-  const { children, onClose, ...other } = props
-  return (
-    <MuiDialogTitle disableTypography className={classes.dialogRoot} {...other}>
-      <Typography variant="body1" component="div">
-        {children}
-      </Typography>
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          className={classes.dialogCloseButton}
-          onClick={onClose}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </MuiDialogTitle>
   )
 }
