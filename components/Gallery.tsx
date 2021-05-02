@@ -381,6 +381,9 @@ export const Gallery = ({
       return
     }
     const handleArrowKeyPressed = (event: KeyboardEvent) => {
+      if (status !== 'entered') {
+        return
+      }
       switch (event.code) {
         case 'ArrowLeft':
           previousSlide()
@@ -400,7 +403,7 @@ export const Gallery = ({
       process.env.NODE_ENV === 'production' &&
         window.removeEventListener('contextmenu', (e) => e.preventDefault())
     }
-  }, [nextSlide, previousSlide])
+  }, [nextSlide, previousSlide, status])
 
   /**
    * Manage animation states
