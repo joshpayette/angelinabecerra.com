@@ -291,8 +291,8 @@ export default function ContactPage() {
         </Grid>
         <Grid item xs={12} sm={6} className={classes.imageWrapper}>
           <Image
-            src="/angelina-bio.jpg"
-            alt="Angelina Becerra Self Photo"
+            src="/contact.jpg"
+            alt="Contact Angelina Becerra"
             layout="fill"
             objectFit="cover"
             objectPosition="center"
