@@ -10,14 +10,14 @@ import { SiteNavigation } from 'components/navigation'
 const useStyles = makeStyles((theme) => ({
   main: {
     width: '100%',
-    height: `calc(100vh - ${theme.mixins.toolbar.minHeight}px - ${theme.spacing(
-      4
+    height: `calc(100% - ${theme.mixins.toolbar.minHeight}px - ${theme.spacing(
+      6
     )}px)`,
     overflowX: 'hidden',
   },
   '@media (orientation: landscape) and (max-height: 500px)': {
     main: {
-      height: `calc(100vh - ${
+      height: `calc(100% - ${
         theme.mixins.toolbar.minHeight
       }px - ${theme.spacing(3)}px)`,
       overflowY: 'scroll',

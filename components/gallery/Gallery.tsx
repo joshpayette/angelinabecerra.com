@@ -111,7 +111,7 @@ const gallerySlice = createSlice({
 const useStyles = makeStyles((theme) => ({
   actionsWrapper: {
     position: 'absolute',
-    width: 'calc(100vw - 50px)',
+    width: 'calc(100% - 50px)',
     left: '50%',
     bottom: 0,
     transform: 'translateX(-50%)',
@@ -120,7 +120,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     [theme.breakpoints.up('md')]: {
-      width: 'calc(100vw - 100px)',
+      width: 'calc(100% - 100px)',
     },
     // backgroundColor: '#0f0',
   },
@@ -163,6 +163,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
   },
+  fullHeight: {
+    height: '100%',
+  },
   iconButton: {
     padding: 0,
     margin: theme.spacing(1),
@@ -173,12 +176,15 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     top: 0,
     width: '100%',
-    height: '100vh',
+    height: '100%',
     backgroundColor: 'rgba(0,0,0,0.8)',
   },
+  noScroll: {
+    overflow: 'hidden',
+  },
   slide: {
-    width: 'calc(100vw - 50px)',
-    height: `calc(100vh - ${theme.spacing(6)}px - ${
+    width: 'calc(100% - 50px)',
+    height: `calc(100% - ${theme.spacing(6)}px - ${
       theme.mixins.toolbar.minHeight
     }px)`,
     position: 'relative',
@@ -189,12 +195,12 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     marginTop: theme.spacing(0),
     [theme.breakpoints.up('md')]: {
-      width: 'calc(100vw - 100px)',
-      height: `calc(100vh - ${theme.spacing(10)}px - ${
+      width: 'calc(100% - 100px)',
+      height: `calc(100% - ${theme.spacing(10)}px - ${
         theme.mixins.toolbar.minHeight
       }px)`,
     },
-    // backgroundColor: '#f00',
+    backgroundColor: '#f00',
   },
   slideImage: {
     border: `5px solid #fff`,
@@ -214,7 +220,7 @@ const useStyles = makeStyles((theme) => ({
   },
   '@media (orientation: landscape) and (max-height: 500px)': {
     slide: {
-      height: `calc(100vh - ${theme.spacing(6)}px - ${
+      height: `calc(100% - ${theme.spacing(6)}px - ${
         theme.mixins.toolbar.minHeight
       }px)`,
       marginTop: 0,
@@ -508,6 +514,7 @@ export const Gallery = ({
       <Swipe
         onSwipeLeft={() => nextSlide()}
         onSwipeRight={() => previousSlide()}
+        className={clsx(classes.fullHeight, classes.noScroll)}
       >
         <div className={classes.backgroundWrapper} ref={bgImageWrapperRef}>
           <div
