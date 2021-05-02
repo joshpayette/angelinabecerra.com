@@ -41,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '1.75',
     marginTop: theme.spacing(2),
   },
+  copyright: {
+    marginTop: theme.spacing(8),
+  },
 }))
 
 export default function AboutPage() {
@@ -114,6 +117,15 @@ export default function AboutPage() {
               2019 Nikon Storytellers semi-finalist
             </li>
           </ul>
+          <Typography
+            variant="body2"
+            component="p"
+            color="inherit"
+            className={clsx(classes.greyText, classes.copyright)}
+          >
+            All images &copy;{new Date().getFullYear()} Angelina Becerra. All
+            rights reserved.
+          </Typography>
         </Grid>
       </Grid>
     </Container>

@@ -25,6 +25,11 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     overflowY: 'auto',
+    height: '100%',
+  },
+  copyright: {
+    color: theme.palette.grey[400],
+    marginTop: theme.spacing(2),
   },
   errorText: {
     color: theme.palette.error.main,
@@ -93,10 +98,7 @@ export default function ContactPage() {
   const [formResponse, setFormResponse] = React.useState<ContactResponse>(null)
 
   return (
-    <Container
-      disableGutters
-      className={clsx(classes.fullHeight, classes.container)}
-    >
+    <Container disableGutters className={classes.container}>
       <Grid
         container
         justify="flex-start"
@@ -295,6 +297,18 @@ export default function ContactPage() {
             objectFit="cover"
             objectPosition="center"
           />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography
+            variant="body2"
+            component="p"
+            color="inherit"
+            className={classes.copyright}
+            align="center"
+          >
+            All images &copy;{new Date().getFullYear()} Angelina Becerra. All
+            rights reserved.
+          </Typography>
         </Grid>
       </Grid>
     </Container>
