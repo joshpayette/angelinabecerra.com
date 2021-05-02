@@ -9,7 +9,7 @@ import {
   PhotoAlbum as PhotoAlbumIcon,
 } from '@material-ui/icons'
 import clsx from 'clsx'
-import { Grid, IconButton } from '@material-ui/core'
+import { Button, Grid, IconButton } from '@material-ui/core'
 import { useRouter } from 'next/router'
 import { useReduceMotion } from 'hooks/use-reduced-motion'
 import { GalleryView } from './GalleryView'
@@ -285,7 +285,7 @@ export const Gallery = ({
   const bgImageEl = bgImageWrapperRef.current?.firstChild
     ?.childNodes[0] as HTMLImageElement
 
-  const fgImageWrapperRef: React.RefObject<HTMLDivElement> = React.useRef()
+  const fgImageWrapperRef: React.RefObject<HTMLButtonElement> = React.useRef()
   const fgImageRef: React.RefObject<HTMLImageElement> = React.useRef()
   /**
    * Kicks off the previous slide transition
@@ -500,14 +500,20 @@ export const Gallery = ({
         </div>
         <div className={classes.mask} />
         <div className={classes.track}>
-          <div className={classes.slide} ref={fgImageWrapperRef}>
+          <Button
+            variant="text"
+            className={classes.slide}
+            ref={fgImageWrapperRef}
+            style={{ backgroundColor: 'transparent' }}
+          >
             <img
               src={images[currentSlideIndex].filename}
               className={classes.slideImage}
               ref={fgImageRef}
               onLoad={() => dispatch(fgImageLoadComplete())}
+              onClick={() => nextSlide()}
             />
-          </div>
+          </Button>
         </div>
         <Grid container className={classes.actionsWrapper}>
           <Grid item container xs className={classes.arrowLeftWrapper}>
