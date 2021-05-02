@@ -23,10 +23,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
-  container: {
-    overflowY: 'auto',
-    height: '100%',
-  },
   copyright: {
     color: theme.palette.grey[400],
     marginTop: theme.spacing(2),
@@ -48,17 +44,11 @@ const useStyles = makeStyles((theme) => ({
   },
   imageWrapper: {
     position: 'relative',
+    width: '100%',
     height: '100%',
-    maxHeight: '75vh',
-    [theme.breakpoints.up('sm')]: {
-      maxHeight: 'initial',
-    },
   },
   textWrapper: {
-    padding: theme.spacing(2),
-    [theme.breakpoints.up('md')]: {
-      padding: theme.spacing(4),
-    },
+    height: '100%',
   },
   greyText: {
     color: theme.palette.grey[400],
@@ -83,7 +73,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: theme.spacing(1),
-    fontSize: '1.15rem',
+    fontSize: '1rem',
+    [theme.breakpoints.up('sm')]: {
+      fontSize: '1.15rem',
+    },
   },
   successText: {
     fontStyle: 'italic',
@@ -96,16 +89,28 @@ const useStyles = makeStyles((theme) => ({
 export default function ContactPage() {
   const classes = useStyles()
   const [formResponse, setFormResponse] = React.useState<ContactResponse>(null)
+  const textWrapperRef: React.RefObject<HTMLDivElement> = React.useRef()
+  const imageWrapperRef: React.RefObject<HTMLDivElement> = React.useRef()
+
+  React.useEffect(() => {
+    if (!textWrapperRef.current || !imageWrapperRef.current) {
+      return
+    }
+    imageWrapperRef.current.style.height =
+      textWrapperRef.current.offsetHeight + 'px'
+  }, [])
 
   return (
-    <Container disableGutters className={classes.container}>
-      <Grid
-        container
-        justify="flex-start"
-        alignItems="flex-start"
-        className={classes.fullHeight}
-      >
-        <Grid item container xs={12} sm={6} className={classes.textWrapper}>
+    <Container>
+      <Grid container justify="flex-start" alignItems="flex-start" spacing={2}>
+        <Grid
+          item
+          container
+          xs={12}
+          sm={6}
+          className={classes.textWrapper}
+          ref={textWrapperRef}
+        >
           <Grid item xs={12} className={classes.textSection}>
             <Typography
               variant="h3"
@@ -288,8 +293,27 @@ export default function ContactPage() {
               )}
             </Formik>
           </Grid>
+          <Grid item xs={12}>
+            <Typography
+              variant="body2"
+              component="p"
+              color="inherit"
+              className={classes.copyright}
+              align="left"
+            >
+              All images &copy;{new Date().getFullYear()} Angelina Becerra. All
+              rights reserved.
+            </Typography>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6} className={classes.imageWrapper}>
+        <Grid
+          item
+          container
+          xs={12}
+          sm={6}
+          className={classes.imageWrapper}
+          ref={imageWrapperRef}
+        >
           <Image
             src="/contact.jpg"
             alt="Contact Angelina Becerra"
@@ -297,18 +321,6 @@ export default function ContactPage() {
             objectFit="cover"
             objectPosition="center"
           />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography
-            variant="body2"
-            component="p"
-            color="inherit"
-            className={classes.copyright}
-            align="center"
-          >
-            All images &copy;{new Date().getFullYear()} Angelina Becerra. All
-            rights reserved.
-          </Typography>
         </Grid>
       </Grid>
     </Container>
