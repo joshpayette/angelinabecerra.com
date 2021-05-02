@@ -154,7 +154,7 @@ export const GalleryView = ({
                 alt={`Gallery image #${index}`}
                 layout="fill"
                 objectFit="cover"
-                objectPosition="center"
+                objectPosition={image.backgroundPosition ?? 'center center'}
               />
             </GridListTile>
           ))}

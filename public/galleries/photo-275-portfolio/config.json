@@ -12,7 +12,7 @@
     { "filename": "10.jpg"},
     { "filename": "11.jpg"},
     { "filename": "12.jpg"},
-    { "filename": "13.jpg"},
+    { "filename": "13.jpg", "backgroundPosition": "right center"},
     { "filename": "14.jpg"},
     { "filename": "15.jpg"},
     { "filename": "16.jpg"},
