@@ -50,6 +50,7 @@ export default function HomePage() {
   return (
     <Gallery
       folderName={null}
+      galleryName="Main Portfolio"
       slideIndex={slideIndex}
       gallery={{ images: imageList }}
     />

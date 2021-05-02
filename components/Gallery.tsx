@@ -23,9 +23,11 @@ import {
   DialogTitleProps,
   Typography,
   useMediaQuery,
+  Hidden,
 } from '@material-ui/core'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { TouchApp as TouchAppIcon } from '@material-ui/icons'
 
 interface State {
   currentSlideIndex: number
@@ -157,6 +159,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
   },
+  dialogActionsTextWrapper: {
+    flexGrow: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
   dialogRoot: {
     margin: 0,
     padding: theme.spacing(2),
@@ -166,6 +174,9 @@ const useStyles = makeStyles((theme) => ({
     right: theme.spacing(1),
     top: theme.spacing(1),
     color: theme.palette.grey[500],
+  },
+  dialogSubtitle: {
+    color: theme.palette.grey[400],
   },
   gridList: {
     width: '100%',
@@ -218,6 +229,9 @@ const useStyles = makeStyles((theme) => ({
     boxShadow:
       '0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22)',
   },
+  touchAppIcon: {
+    marginRight: theme.spacing(1),
+  },
   track: {
     display: 'flex',
     alignItems: 'center',
@@ -260,11 +274,17 @@ export interface GalleryType {
 
 interface Props {
   folderName: string
+  galleryName: string
   gallery: GalleryType
   slideIndex: string[]
 }
 
-export const Gallery = ({ folderName, gallery, slideIndex }: Props) => {
+export const Gallery = ({
+  folderName,
+  galleryName,
+  gallery,
+  slideIndex,
+}: Props) => {
   const classes = useStyles()
   const router = useRouter()
 
@@ -466,7 +486,17 @@ export const Gallery = ({ folderName, gallery, slideIndex }: Props) => {
         onClick={closeGalleryDialog}
         onClose={closeGalleryDialog}
       >
-        <DialogTitle onClose={closeGalleryDialog}>Gallery Images</DialogTitle>
+        <DialogTitle onClose={closeGalleryDialog}>
+          {galleryName ? `${galleryName} Images` : 'Gallery Images'}
+          <Typography
+            variant="body2"
+            component="div"
+            color="inherit"
+            className={classes.dialogSubtitle}
+          >
+            Photos by Angelina Becerra, &copy;{new Date().getFullYear()}
+          </Typography>
+        </DialogTitle>
         <DialogContent>
           <GridList
             cellHeight={500}
@@ -493,8 +523,18 @@ export const Gallery = ({ folderName, gallery, slideIndex }: Props) => {
           </GridList>
         </DialogContent>
         <DialogActions>
+          <Hidden smUp>
+            <div className={classes.dialogActionsTextWrapper}>
+              <TouchAppIcon className={classes.touchAppIcon} />
+              <Typography variant="body2" component="div" color="inherit">
+                Click to go to slide
+                <br />
+                Scroll for more images
+              </Typography>
+            </div>
+          </Hidden>
           <Button variant="text" color="inherit" type="button">
-            Close
+            Close Gallery View
           </Button>
         </DialogActions>
       </Dialog>
@@ -564,7 +604,9 @@ const DialogTitle = (props: DialogTitleProps & { onClose(): void }) => {
   const { children, onClose, ...other } = props
   return (
     <MuiDialogTitle disableTypography className={classes.dialogRoot} {...other}>
-      <Typography variant="h6">{children}</Typography>
+      <Typography variant="body1" component="div">
+        {children}
+      </Typography>
       {onClose ? (
         <IconButton
           aria-label="close"

@@ -10,27 +10,40 @@ interface OrderConfig {
   images: string[]
 }
 
-export async function getStaticPaths() {
-  const folders = [
-    'event-photography',
-    'fine-art',
-    'photo-275-portfolio',
-    'portrait-and-fashion',
-    'pride-and-hope',
-    'protest-and-unrest',
-  ]
+const galleries = [
+  { folder: 'event-photography', name: 'Event Photography' },
+  { folder: 'fine-art', name: 'Fine Art' },
+  { folder: 'photo-275-portfolio', name: 'Photo 275 Portfolio' },
+  { folder: 'portrait-and-fashion', name: 'Portrait & Fashion' },
+  { folder: 'pride-and-hope', name: 'Pride & Hope' },
+  { folder: 'protest-and-unrest', name: 'Protest & Unrest' },
+]
 
-  const paths = folders
-    .map((folder) => {
+export async function getStaticPaths() {
+  const paths = galleries
+    .map((gallery) => {
+      if (!gallery.name) {
+        console.info('gallery error', gallery)
+      }
       const imageCount =
-        fs.readdirSync(`./public/galleries/${folder}`)?.length ?? 0
+        fs.readdirSync(`./public/galleries/${gallery.folder}`)?.length ?? 0
       /** Add path for no slideIndex */
-      const paths = [{ params: { folderName: folder, slideIndex: [] } }]
+      const paths = [
+        {
+          params: {
+            folderName: gallery.folder,
+            slideIndex: [],
+          },
+        },
+      ]
       /** Add path for each index */
       for (let i = 0; i < imageCount - 1; i++) {
         const slideIndex = [(i + 1).toString()]
         paths.push({
-          params: { folderName: folder, slideIndex },
+          params: {
+            folderName: gallery.folder,
+            slideIndex,
+          },
         })
       }
       return paths
@@ -76,9 +89,12 @@ export default function GalleryPage({
   imageList,
   slideIndex,
 }: Props) {
+  const galleryName = galleries.find((gallery) => gallery.folder === folderName)
+    .name
   return (
     <Gallery
       folderName={folderName}
+      galleryName={galleryName}
       gallery={{ images: imageList }}
       slideIndex={slideIndex}
     />
