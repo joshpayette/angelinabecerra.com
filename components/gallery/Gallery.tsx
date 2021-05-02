@@ -128,12 +128,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
   },
-  arrowLeftWrapper: {
-    justifyContent: 'flex-end',
-  },
-  arrowRightWrapper: {
-    justifyContent: 'flex-start',
-  },
   arrowLeft: {
     left: 0,
     justifyContent: 'flex-start',
@@ -142,11 +136,17 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     justifyContent: 'flex-end',
   },
+  arrowLeftWrapper: {
+    justifyContent: 'flex-end',
+  },
+  arrowRightWrapper: {
+    justifyContent: 'flex-start',
+  },
   arrowIcon: {
     width: '40px!important',
     height: '40px!important',
   },
-  background: {
+  backgroundWrapper: {
     position: 'absolute',
     left: 0,
     top: 0,
@@ -490,7 +490,7 @@ export const Gallery = ({
         onSwipeLeft={() => nextSlide()}
         onSwipeRight={() => previousSlide()}
       >
-        <div className={classes.background} ref={bgImageWrapperRef}>
+        <div className={classes.backgroundWrapper} ref={bgImageWrapperRef}>
           <div
             className={classes.bgImage}
             style={{
