@@ -352,12 +352,18 @@ export const Gallery = ({
   const fgImageRef: React.RefObject<HTMLImageElement> = React.useRef()
 
   const previousSlide = React.useCallback(() => {
+    if (status !== 'entered') {
+      return
+    }
     dispatch(slideExiting({ direction: 'prev', galleryLength: images.length }))
-  }, [images.length, slideExiting])
+  }, [images.length, slideExiting, status])
 
   const nextSlide = React.useCallback(() => {
+    if (status !== 'entered') {
+      return
+    }
     dispatch(slideExiting({ direction: 'next', galleryLength: images.length }))
-  }, [images.length, slideExiting])
+  }, [images.length, slideExiting, status])
 
   const onGridListTileClick = (slideIndex: number) => {
     dispatch(goToSlide({ slideIndex }))
