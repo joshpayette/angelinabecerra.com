@@ -309,7 +309,6 @@ export const Gallery = ({
   const screenXs = useMediaQuery(theme.breakpoints.only('xs'))
   const screenSm = useMediaQuery(theme.breakpoints.only('sm'))
   const screenMd = useMediaQuery(theme.breakpoints.only('md'))
-  const screenLg = useMediaQuery(theme.breakpoints.up('lg'))
   const getGridListCols = () => {
     if (screenXs) {
       return 1
