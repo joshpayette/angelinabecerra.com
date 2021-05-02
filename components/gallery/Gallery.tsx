@@ -504,7 +504,7 @@ export const Gallery = ({
             variant="text"
             className={classes.slide}
             ref={fgImageWrapperRef}
-            style={{ backgroundColor: 'transparent' }}
+            style={{ backgroundColor: 'transparent', cursor: 'default' }}
           >
             <img
               src={images[currentSlideIndex].filename}
