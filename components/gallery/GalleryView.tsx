@@ -14,6 +14,7 @@ import {
 import { DialogTitle } from './DialogTitle'
 import Image from 'next/image'
 import { TouchApp as TouchAppIcon } from '@material-ui/icons'
+import gsap from 'gsap'
 
 const useStyles = makeStyles((theme) => ({
   dialogActionsTextWrapper: {
@@ -42,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
   galleryName: string
+  galleryScrollPosition: number
   images: {
     filename: string
     backgroundPosition?:
@@ -56,12 +58,19 @@ interface Props {
       | 'center bottom'
   }[]
   open: boolean
-  onClose(): void
-  onTileClick(slideIndex: number): void
+  onClose({ scrollPosition }: { scrollPosition: number }): void
+  onTileClick({
+    slideIndex,
+    scrollPosition,
+  }: {
+    slideIndex: number
+    scrollPosition: number
+  }): void
 }
 
 export const GalleryView = ({
   galleryName,
+  galleryScrollPosition,
   images,
   open,
   onClose,
@@ -69,6 +78,22 @@ export const GalleryView = ({
 }: Props) => {
   const classes = useStyles()
   const theme = useTheme()
+  const gridListRef: React.Ref<HTMLUListElement> = React.useRef()
+  const [scrollPosition, setScrollPosition] = React.useState(
+    galleryScrollPosition
+  )
+
+  React.useEffect(() => {
+    if (!gridListRef.current) {
+      return
+    }
+    console.info('scrolling now', galleryScrollPosition)
+    gridListRef.current.scrollTo({ left: 0, top: galleryScrollPosition })
+  }, [galleryScrollPosition])
+
+  const handleScroll = (e: any) => {
+    setScrollPosition(e.target.scrollTop)
+  }
 
   /**
    * Used for GridList to determine column count and size
@@ -90,8 +115,14 @@ export const GalleryView = ({
   }
 
   return (
-    <Dialog fullScreen open={open} onClick={onClose} onClose={onClose}>
-      <DialogTitle onClose={onClose}>
+    <Dialog
+      fullScreen
+      open={true}
+      onClick={() => onClose({ scrollPosition })}
+      onClose={onClose}
+      style={{ display: open ? 'block' : 'none' }}
+    >
+      <DialogTitle onClose={() => onClose({ scrollPosition })}>
         {galleryName ? `${galleryName} Images` : 'Gallery Images'}
         <Typography
           variant="body2"
@@ -107,12 +138,14 @@ export const GalleryView = ({
           cellHeight={500}
           className={classes.gridList}
           cols={getGridListCols()}
+          onScroll={handleScroll}
+          ref={gridListRef}
         >
           {images.map((image, index) => (
             <GridListTile
               key={image.filename}
               cols={1}
-              onClick={() => onTileClick(index)}
+              onClick={() => onTileClick({ slideIndex: index, scrollPosition })}
               component="button"
               className={classes.gridListTile}
             >

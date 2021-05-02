@@ -258,7 +258,7 @@ export const Gallery = ({
   const prefersReducedMotion = useReduceMotion()
 
   const [galleryDialogOpen, setGalleryDialogOpen] = React.useState(false)
-  const closeGalleryDialog = () => setGalleryDialogOpen(false)
+  const [galleryScrollPosition, setGalleryScrollPosition] = React.useState(0)
 
   const slideIndexParam = slideIndex ? parseInt(slideIndex[0], 10) : 1
   const { images } = gallery
@@ -308,12 +308,30 @@ export const Gallery = ({
   /**
    * Handles an image clicked in the GalleryView component
    */
-  const onGridListTileClick = (slideIndex: number) => {
+  const onGridListTileClick = ({
+    slideIndex,
+    scrollPosition,
+  }: {
+    slideIndex: number
+    scrollPosition: number
+  }) => {
     if (slideIndex === currentSlideIndex) {
+      setGalleryScrollPosition(scrollPosition)
       setGalleryDialogOpen(false)
       return
     }
     dispatch(goToSlide({ slideIndex }))
+  }
+  /**
+   * Logic for when the gallery dialog is closed
+   */
+  const closeGalleryDialog = ({
+    scrollPosition,
+  }: {
+    scrollPosition: number
+  }) => {
+    setGalleryScrollPosition(scrollPosition)
+    setGalleryDialogOpen(false)
   }
   /**
    * Initialize current slide based on prop
@@ -481,6 +499,7 @@ export const Gallery = ({
     <React.Fragment>
       <GalleryView
         galleryName={galleryName}
+        galleryScrollPosition={galleryScrollPosition}
         images={images}
         open={galleryDialogOpen}
         onClose={closeGalleryDialog}
