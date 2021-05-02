@@ -4,10 +4,22 @@ import fs from 'fs'
 import { Gallery } from 'components/Gallery'
 
 /**
- * Shape of the parsed JSON data for an order.json
+ * Shape of the parsed JSON data for a config.json
  */
-interface OrderConfig {
-  images: string[]
+interface GalleryConfig {
+  images: {
+    filename: string
+    backgroundPosition?:
+      | 'left top'
+      | 'left center'
+      | 'left bottom'
+      | 'right top'
+      | 'right center'
+      | 'right bottom'
+      | 'center top'
+      | 'center center'
+      | 'center bottom'
+  }[]
 }
 
 const galleries = [
@@ -58,21 +70,32 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }: GetStaticPropsContext) {
   const { folderName, slideIndex } = params
-  const orderConfigPath = `./public/galleries/${folderName}/order.json`
-  let imageList: string[] = []
+  const galleryConfigPath = `./public/galleries/${folderName}/config.json`
+  let imageList: GalleryConfig['images'] = []
 
-  if (fs.existsSync(orderConfigPath)) {
-    const orderConfig: OrderConfig = JSON.parse(
-      fs.readFileSync(orderConfigPath, 'utf8')
+  if (fs.existsSync(galleryConfigPath)) {
+    const galleryConfig: GalleryConfig = JSON.parse(
+      fs.readFileSync(galleryConfigPath, 'utf8')
     )
-    imageList = orderConfig.images
+    imageList = galleryConfig.images
   } else {
-    imageList = fs.readdirSync(`./public/galleries/${folderName}`)
+    imageList = fs
+      .readdirSync(`./public/galleries/${folderName}`)
+      .map((row) => {
+        return {
+          filename: row,
+        }
+      })
   }
   return {
     props: {
       folderName,
-      imageList: imageList.map((image) => `/galleries/${folderName}/${image}`),
+      imageList: imageList.map((image) => {
+        return {
+          ...image,
+          filename: `/galleries/${folderName}/${image.filename}`,
+        }
+      }),
       slideIndex: slideIndex ?? null,
     },
   }
@@ -80,7 +103,7 @@ export async function getStaticProps({ params }: GetStaticPropsContext) {
 
 interface Props {
   folderName: string
-  imageList: string[]
+  imageList: GalleryConfig['images']
   slideIndex: string[]
 }
 

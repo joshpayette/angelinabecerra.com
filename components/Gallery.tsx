@@ -269,7 +269,19 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export interface GalleryType {
-  images: string[]
+  images: {
+    filename: string
+    backgroundPosition?:
+      | 'left top'
+      | 'left center'
+      | 'left bottom'
+      | 'right top'
+      | 'right center'
+      | 'right bottom'
+      | 'center top'
+      | 'center center'
+      | 'center bottom'
+  }[]
 }
 
 interface Props {
@@ -505,14 +517,14 @@ export const Gallery = ({
           >
             {images.map((image, index) => (
               <GridListTile
-                key={image}
+                key={image.filename}
                 cols={1}
                 onClick={() => onGridListTileClick(index)}
                 component="button"
                 className={classes.gridListTile}
               >
                 <Image
-                  src={image}
+                  src={image.filename}
                   alt={`Gallery image #${index}`}
                   layout="fill"
                   objectFit="cover"
@@ -546,7 +558,7 @@ export const Gallery = ({
           <div
             className={classes.bgImage}
             style={{
-              backgroundImage: `url(${images[currentSlideIndex]})`,
+              backgroundImage: `url(${images[currentSlideIndex].filename})`,
             }}
           />
         </div>
@@ -554,7 +566,7 @@ export const Gallery = ({
         <div className={classes.track}>
           <div className={classes.slide} ref={fgImageWrapperRef}>
             <img
-              src={images[currentSlideIndex]}
+              src={images[currentSlideIndex].filename}
               className={classes.slideImage}
               ref={fgImageRef}
               onLoad={() => dispatch(fgImageLoadComplete())}

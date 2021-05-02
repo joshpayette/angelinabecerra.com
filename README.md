@@ -5,21 +5,26 @@
 1. Copy folder of images to `public/galleries`.
 1. Add folder to `getStaticPaths` in `pages/gallery/[folderName].tsx`.
 
-### Specifying image order
+## Gallery Configuration
 
-By default, the build script will order the pictures based on the filename. However, you can override this behavior by specifying the order the images should be displayed. Include a file named `order.json` in an image folder to tell the script to use a specific order.
+By default, the build script will order the pictures based on the filename. However, you can override this behavior by specifying a gallery configuration . Include a file named `config.json` in an image folder to give the script some additional information.
 
-**Sample `order.json`**
+**Sample `gallery.json`**
 
 ```typescript
 {
   "images": [
-    "1.JPG",
-    "6.JPG",
-    "8.JPG",
-    "12.jpg",
-    "18.jpg",
-    "20.jpg"
+    { "filename": "1.JPG" },
+    { "filename": "3.JPG" },
+    { "filename": "7.JPG", backgroundPosition: 'top center' },
+    { "filename": "2.JPG" },
+    { "filename": "8.JPG" },
+    { "filename": "12.JPG" },
   ]
 }
 ```
+
+### Options
+
+- `filename`
+- `backgroundPosition` - _Optional_ - The CSS background position for the image. This is used in the gallery view for the image thumbnail.
