@@ -244,8 +244,11 @@ const useStyles = makeStyles((theme) => ({
       justifyContent: 'center',
     },
     slide: {
-      height: `calc(100% - 90px)`,
+      height: 'calc(100% - 24px)',
       marginTop: 0,
+    },
+    track: {
+      height: 'calc(100% - 76px)',
     },
   },
 }))
