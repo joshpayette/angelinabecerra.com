@@ -220,7 +220,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 3,
     overflow: 'hidden',
     padding: theme.spacing(0, 2),
-    backgroundColor: '#f00',
+    // backgroundColor: '#f00',
   },
   '@media (orientation: landscape) and (max-height: 500px)': {
     actionsWrapper: {
