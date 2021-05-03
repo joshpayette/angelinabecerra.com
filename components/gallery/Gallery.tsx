@@ -189,6 +189,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: `calc(100vh - 74px - ${theme.mixins.toolbar.minHeight}px)`,
     position: 'relative',
+    padding: 0,
     zIndex: 3,
     boxSizing: 'border-box',
     display: 'flex',
@@ -197,9 +198,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(0),
     [theme.breakpoints.up('md')]: {
       width: 'calc(100% - 100px)',
-      height: `calc(100vh - ${theme.spacing(10)}px - ${
-        theme.mixins.toolbar.minHeight
-      }px)`,
+      height: `calc(100vh - 110px - ${theme.mixins.toolbar.minHeight}px)`,
     },
   },
   slideImage: {
@@ -207,19 +206,19 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     maxHeight: '100%',
     maxWidth: '100%',
-    boxShadow:
-      '0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22)',
+    // boxShadow:
+    //   '0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 38px rgba(0, 0, 0, 0.22)',
   },
   track: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 'calc(100% - 134px)',
+    height: 'calc(100% - 136px)',
     width: '100%',
     position: 'fixed',
     zIndex: 3,
     overflow: 'hidden',
-    padding: theme.spacing(2),
+    padding: theme.spacing(0, 2),
     // backgroundColor: '#f00',
   },
   '@media (orientation: landscape) and (max-height: 500px)': {
