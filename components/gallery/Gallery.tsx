@@ -187,7 +187,7 @@ const useStyles = makeStyles((theme) => ({
   },
   slide: {
     width: '100%',
-    height: `calc(100vh - 64px - ${theme.mixins.toolbar.minHeight}px)`,
+    height: `calc(100vh - 74px - ${theme.mixins.toolbar.minHeight}px)`,
     position: 'relative',
     zIndex: 3,
     boxSizing: 'border-box',
@@ -214,12 +214,12 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 'calc(100% - 124px)',
+    height: 'calc(100% - 134px)',
     width: '100%',
     position: 'fixed',
     zIndex: 3,
     overflow: 'hidden',
-    padding: theme.spacing(0, 2),
+    padding: theme.spacing(2),
     // backgroundColor: '#f00',
   },
   '@media (orientation: landscape) and (max-height: 500px)': {

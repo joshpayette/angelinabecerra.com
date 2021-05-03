@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
     body: {
       width: '100%',
       height: '100%',
+      padding: '0!important',
     },
     '#__next': {
       width: '100%',
