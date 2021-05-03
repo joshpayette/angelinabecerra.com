@@ -187,7 +187,7 @@ const useStyles = makeStyles((theme) => ({
   },
   slide: {
     width: '100%',
-    height: `calc(100% - ${theme.spacing(6)}px - ${
+    height: `calc(100vh - ${theme.spacing(6)}px - ${
       theme.mixins.toolbar.minHeight
     }px)`,
     position: 'relative',
@@ -199,7 +199,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(0),
     [theme.breakpoints.up('md')]: {
       width: 'calc(100% - 100px)',
-      height: `calc(100% - ${theme.spacing(10)}px - ${
+      height: `calc(100vh - ${theme.spacing(10)}px - ${
         theme.mixins.toolbar.minHeight
       }px)`,
     },
