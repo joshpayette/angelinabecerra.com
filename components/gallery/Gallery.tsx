@@ -147,7 +147,7 @@ const useStyles = makeStyles((theme) => ({
     height: '40px!important',
   },
   backgroundWrapper: {
-    position: 'absolute',
+    position: 'fixed',
     left: 0,
     top: 0,
     width: '100%',
@@ -171,7 +171,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
   },
   mask: {
-    position: 'absolute',
+    position: 'fixed',
     zIndex: 2,
     left: 0,
     top: 0,
@@ -179,11 +179,14 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     backgroundColor: 'rgba(0,0,0,0.8)',
   },
-  noScroll: {
+  swipe: {
     overflow: 'hidden',
+    height: '100%',
+    width: '100%',
+    position: 'relative',
   },
   slide: {
-    width: 'calc(100% - 50px)',
+    width: '100%',
     height: `calc(100% - ${theme.spacing(6)}px - ${
       theme.mixins.toolbar.minHeight
     }px)`,
@@ -211,28 +214,22 @@ const useStyles = makeStyles((theme) => ({
   },
   track: {
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
     height: '100%',
     width: '100%',
-    marginBottom: theme.spacing(2),
-    // backgroundColor: '#f00',
-    position: 'absolute',
+    position: 'fixed',
     zIndex: 3,
+    overflowY: 'auto',
+    // backgroundColor: '#f00',
   },
   '@media (orientation: landscape) and (max-height: 500px)': {
-    slide: {
-      height: `calc(100% - ${theme.spacing(2)}px - ${
-        theme.mixins.toolbar.minHeight
-      }px)`,
-      marginTop: 0,
-    },
     actionsWrapper: {
-      position: 'absolute',
+      position: 'fixed',
       left: 0,
-      top: `calc(50% + 35px)`,
+      top: '50%',
       width: 'auto',
-      transform: 'translateY(-50%)',
+      transform: 'translateY(-25%)',
       flexDirection: 'column',
       backgroundColor: 'rgba(0,0,0,0.6)',
     },
@@ -244,6 +241,10 @@ const useStyles = makeStyles((theme) => ({
     },
     arrowRightWrapper: {
       justifyContent: 'center',
+    },
+    slide: {
+      height: `calc(100% - 90px)`,
+      marginTop: 0,
     },
   },
 }))
@@ -516,7 +517,7 @@ export const Gallery = ({
       <Swipe
         onSwipeLeft={() => nextSlide()}
         onSwipeRight={() => previousSlide()}
-        className={clsx(classes.fullHeight, classes.noScroll)}
+        className={classes.swipe}
       >
         <div className={classes.backgroundWrapper} ref={bgImageWrapperRef}>
           <div
