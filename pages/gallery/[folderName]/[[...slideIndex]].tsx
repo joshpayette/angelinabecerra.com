@@ -3,6 +3,22 @@ import * as React from 'react'
 import fs from 'fs'
 import { Gallery } from 'components/gallery'
 import { GalleryConfig } from 'components/gallery/Gallery'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles((theme) => ({
+  main: {
+    width: '100%',
+    height: `calc(100% - ${theme.mixins.toolbar.minHeight}px - 20px)`,
+    overflowX: 'hidden',
+    overflowY: 'auto',
+  },
+  '@media (orientation: landscape) and (max-height: 500px)': {
+    main: {
+      width: '100%',
+      height: `calc(100% - 75px)`,
+    },
+  },
+}))
 
 const galleries = [
   { folder: 'event-photography', name: 'Event Photography' },
@@ -91,14 +107,17 @@ export default function GalleryPage({
   imageList,
   slideIndex,
 }: Props) {
+  const classes = useStyles()
   const galleryName = galleries.find((gallery) => gallery.folder === folderName)
     .name
   return (
-    <Gallery
-      folderName={folderName}
-      galleryName={galleryName}
-      gallery={{ images: imageList }}
-      slideIndex={slideIndex}
-    />
+    <main className={classes.main}>
+      <Gallery
+        folderName={folderName}
+        galleryName={galleryName}
+        gallery={{ images: imageList }}
+        slideIndex={slideIndex}
+      />
+    </main>
   )
 }

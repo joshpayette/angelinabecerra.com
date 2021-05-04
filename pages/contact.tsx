@@ -17,6 +17,19 @@ import ky from 'ky-universal'
 import { ContactRequest, ContactResponse } from './api/contact'
 
 const useStyles = makeStyles((theme) => ({
+  main: {
+    width: '100%',
+    height: `calc(100% - ${theme.mixins.toolbar.minHeight}px - 30px)`,
+    overflowX: 'hidden',
+    overflowY: 'auto',
+  },
+  '@media (orientation: landscape) and (max-height: 500px)': {
+    main: {
+      width: '100%',
+      height: `calc(100% - 75px)`,
+    },
+  },
+
   buttonRow: {
     padding: theme.spacing(2, 0),
     display: 'flex',
@@ -82,6 +95,7 @@ const useStyles = makeStyles((theme) => ({
     fontStyle: 'italic',
   },
   textSection: {
+    marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
 }))
@@ -101,7 +115,7 @@ export default function ContactPage() {
   }, [])
 
   return (
-    <Container>
+    <Container component="main" className={classes.main}>
       <Grid container justify="flex-start" alignItems="flex-start" spacing={2}>
         <Grid
           item

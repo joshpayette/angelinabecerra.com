@@ -8,18 +8,6 @@ import { theme } from 'theme'
 import { SiteNavigation } from 'components/navigation'
 
 const useStyles = makeStyles((theme) => ({
-  main: {
-    width: '100%',
-    height: `calc(100% - ${theme.mixins.toolbar.minHeight}px - 20px)`,
-    overflowX: 'hidden',
-    overflowY: 'auto',
-  },
-  '@media (orientation: landscape) and (max-height: 500px)': {
-    main: {
-      width: '100%',
-      height: `calc(100% - 75px)`,
-    },
-  },
   '@global': {
     html: {
       width: '100%',
@@ -61,9 +49,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <SiteNavigation />
-        <main className={classes.main}>
-          <Component {...pageProps} />
-        </main>
+        <Component {...pageProps} />
       </ThemeProvider>
     </>
   )

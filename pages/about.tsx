@@ -6,6 +6,9 @@ import clsx from 'clsx'
 
 const useStyles = makeStyles((theme) => ({
   container: {
+    width: '100%',
+    height: `calc(100% - ${theme.mixins.toolbar.minHeight}px - 30px)`,
+    overflowX: 'hidden',
     overflowY: 'auto',
   },
   fullHeight: {
@@ -19,9 +22,8 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     height: '100%',
     minHeight: 500,
-    maxHeight: '75vh',
     [theme.breakpoints.up('sm')]: {
-      maxHeight: 'initial',
+      minHeight: 700,
     },
   },
   textWrapper: {
@@ -51,10 +53,7 @@ export default function AboutPage() {
   const classes = useStyles()
 
   return (
-    <Container
-      disableGutters
-      className={clsx(classes.fullHeight, classes.container)}
-    >
+    <Container component="main" disableGutters className={classes.container}>
       <Grid
         container
         justify="flex-start"

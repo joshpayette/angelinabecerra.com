@@ -2,6 +2,22 @@ import { Gallery } from 'components/gallery'
 import * as React from 'react'
 import { useRouter } from 'next/router'
 import { GalleryConfig } from 'components/gallery/Gallery'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles((theme) => ({
+  main: {
+    width: '100%',
+    height: `calc(100% - ${theme.mixins.toolbar.minHeight}px - 20px)`,
+    overflowX: 'hidden',
+    overflowY: 'auto',
+  },
+  '@media (orientation: landscape) and (max-height: 500px)': {
+    main: {
+      width: '100%',
+      height: `calc(100% - 75px)`,
+    },
+  },
+}))
 
 const imageList: GalleryConfig = {
   images: [
@@ -40,6 +56,7 @@ const imageList: GalleryConfig = {
 }
 
 export default function HomePage() {
+  const classes = useStyles()
   const router = useRouter()
   const { query } = router
   const slideIndexParam = query.slideIndex ?? null
@@ -54,11 +71,13 @@ export default function HomePage() {
   }
 
   return (
-    <Gallery
-      folderName={null}
-      galleryName="Main Portfolio"
-      slideIndex={slideIndex}
-      gallery={imageList}
-    />
+    <main className={classes.main}>
+      <Gallery
+        folderName={null}
+        galleryName="Main Portfolio"
+        slideIndex={slideIndex}
+        gallery={imageList}
+      />
+    </main>
   )
 }
