@@ -27,7 +27,7 @@
     { "filename": "25.JPG"},
     { "filename": "26.JPG"},
     { "filename": "27.JPG"},
-    { "filename": "28.JPG"},
+    { "filename": "28.JPG", "backgroundPosition": "left center"},
     { "filename": "29.JPG"},
     { "filename": "30.JPG"},
     { "filename": "31.JPG"},

@@ -76,7 +76,7 @@
     { "filename": "74.JPG"},
     { "filename": "75.JPG"},
     { "filename": "76.JPG"},
-    { "filename": "77.JPG"},
+    { "filename": "77.JPG", "backgroundPosition": "right top"},
     { "filename": "78.JPG"},
     { "filename": "79.JPG"},
     { "filename": "80.JPG"},
