@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
   imageWrapper: {
     position: 'relative',
     height: '100%',
+    minHeight: 500,
     maxHeight: '75vh',
     [theme.breakpoints.up('sm')]: {
       maxHeight: 'initial',
@@ -66,7 +67,7 @@ export default function AboutPage() {
             alt="Angelina Becerra Self Photo"
             layout="fill"
             objectFit="cover"
-            objectPosition="center"
+            objectPosition="top center"
           />
         </Grid>
         <Grid item xs={12} sm={6} className={classes.textWrapper}>
