@@ -95,7 +95,6 @@ const useStyles = makeStyles((theme) => ({
     fontStyle: 'italic',
   },
   textSection: {
-    marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
 }))

@@ -14,7 +14,6 @@ import { siteLinks } from 'components/navigation/links'
 import { makeStyles } from '@material-ui/core/styles'
 import { DrawerLink } from './DrawerLink'
 import { NavLink } from './NavLink'
-import clsx from 'clsx'
 
 const useStyles = makeStyles((theme) => ({
   childList: {
