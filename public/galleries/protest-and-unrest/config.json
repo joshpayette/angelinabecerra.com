@@ -5,7 +5,7 @@
     { "filename": "3.JPG"},
     { "filename": "4.JPG"},
     { "filename": "5.JPG"},
-    { "filename": "6.JPG"},
+    { "filename": "6.JPG", "backgroundPosition": "center bottom" },
     { "filename": "7.JPG"},
     { "filename": "8.JPG"},
     { "filename": "9.JPG"},

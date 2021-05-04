@@ -16,9 +16,6 @@ const galleries = [
 export async function getStaticPaths() {
   const paths = galleries
     .map((gallery) => {
-      if (!gallery.name) {
-        console.info('gallery error', gallery)
-      }
       const imageCount =
         fs.readdirSync(`./public/galleries/${gallery.folder}`)?.length ?? 0
       /** Add path for no slideIndex */

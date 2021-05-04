@@ -14,7 +14,6 @@ import {
 import { DialogTitle } from './DialogTitle'
 import Image from 'next/image'
 import { TouchApp as TouchAppIcon } from '@material-ui/icons'
-import gsap from 'gsap'
 
 const useStyles = makeStyles((theme) => ({
   dialogActionsTextWrapper: {
@@ -87,7 +86,6 @@ export const GalleryView = ({
     if (!gridListRef.current) {
       return
     }
-    console.info('scrolling now', galleryScrollPosition)
     gridListRef.current.scrollTo({ left: 0, top: galleryScrollPosition })
   }, [galleryScrollPosition])
 
@@ -114,6 +112,34 @@ export const GalleryView = ({
     return 4
   }
 
+  const getGridListDimensions = () => {
+    if (screenXs) {
+      return {
+        cols: 1,
+        cellHeight: 250,
+      }
+    }
+    if (screenSm) {
+      return {
+        cols: 2,
+        cellHeight: 500,
+      }
+    }
+    if (screenMd) {
+      return {
+        cols: 3,
+        cellHeight: 500,
+      }
+    }
+
+    return {
+      cols: 4,
+      cellHeight: 500,
+    }
+  }
+
+  const gridListDimensions = getGridListDimensions()
+
   return (
     <Dialog
       fullScreen
@@ -135,9 +161,9 @@ export const GalleryView = ({
       </DialogTitle>
       <DialogContent>
         <GridList
-          cellHeight={500}
+          cellHeight={gridListDimensions.cellHeight}
+          cols={gridListDimensions.cols}
           className={classes.gridList}
-          cols={getGridListCols()}
           onScroll={handleScroll}
           ref={gridListRef}
         >
@@ -166,8 +192,6 @@ export const GalleryView = ({
             <TouchAppIcon className={classes.touchAppIcon} />
             <Typography variant="body2" component="div" color="inherit">
               Click to go to slide
-              <br />
-              Scroll for more images
             </Typography>
           </div>
         </Hidden>
