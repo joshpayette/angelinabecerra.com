@@ -99,18 +99,6 @@ export const GalleryView = ({
   const screenXs = useMediaQuery(theme.breakpoints.only('xs'))
   const screenSm = useMediaQuery(theme.breakpoints.only('sm'))
   const screenMd = useMediaQuery(theme.breakpoints.only('md'))
-  const getGridListCols = () => {
-    if (screenXs) {
-      return 1
-    }
-    if (screenSm) {
-      return 2
-    }
-    if (screenMd) {
-      return 3
-    }
-    return 4
-  }
 
   const getGridListDimensions = () => {
     if (screenXs) {
@@ -156,7 +144,7 @@ export const GalleryView = ({
           color="inherit"
           className={classes.dialogSubtitle}
         >
-          Photos by Angelina Becerra, &copy;{new Date().getFullYear()}
+          Photos by Angelina Becerra &copy;{new Date().getFullYear()}
         </Typography>
       </DialogTitle>
       <DialogContent>
