@@ -9,6 +9,55 @@ export default class MyDocument extends Document {
         <Head>
           {/* PWA primary color */}
           <meta name="theme-color" content="#000" />
+          <meta
+            name="description"
+            content="Website for Angelina Becerra, Photographer, Writer, Observer."
+          />
+          <meta
+            property="twitter:card"
+            name="twitter:card"
+            content="summary_large_image"
+          />
+          <meta
+            property="twitter:site"
+            name="twitter:site"
+            content="@angelinaphotog"
+          />
+          <meta
+            property="twitter:creator"
+            name="twitter:creator"
+            content="@angelinaphotog"
+          />
+          <meta
+            property="twitter:title"
+            name="twitter:title"
+            content="AngelinaBecerra.com"
+          />
+          <meta
+            property="twitter:description"
+            name="twitter:description"
+            content="Website for Angelina Becerra, Photographer, Writer, Observer."
+          />
+          <meta
+            property="twitter:image"
+            name="twitter:image"
+            content="https://www.angelinabecerra.com/angelina-bio.jpg"
+          />
+          <meta
+            property="og:image"
+            name="og:image"
+            content="https://www.angelinabecerra.com/angelina-bio.jpg"
+          />
+          <meta
+            property="og:title"
+            name="og:title"
+            content="AngelinaBecerra.com"
+          />
+          <meta
+            property="og:description"
+            name="og:description"
+            content="Website for Angelina Becerra, Photographer, Writer, Observer."
+          />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           {/* 
             font-family: 'Inter', sans-serif;
