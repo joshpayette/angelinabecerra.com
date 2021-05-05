@@ -545,6 +545,9 @@ export const Gallery = ({
               ref={fgImageRef}
               onLoad={() => dispatch(fgImageLoadComplete())}
               onClick={() => nextSlide()}
+              alt={`${galleryName ?? 'Gallery'} Image #${
+                currentSlideIndex + 1
+              }`}
             />
           </Button>
         </div>
