@@ -41,12 +41,12 @@ export default class MyDocument extends Document {
           <meta
             property="twitter:image"
             name="twitter:image"
-            content="https://www.angelinabecerra.com/angelina-bio.jpg"
+            content="https://www.angelinabecerra.com/angelina-og-image.jpg"
           />
           <meta
             property="og:image"
             name="og:image"
-            content="https://www.angelinabecerra.com/angelina-bio.jpg"
+            content="https://www.angelinabecerra.com/angelina-og-image.jpg"
           />
           <meta
             property="og:title"
