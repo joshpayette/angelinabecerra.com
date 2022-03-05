@@ -42,6 +42,10 @@ export const siteLinks: SiteLinkType[] = [
         label: 'Protest & Unrest',
         path: '/gallery/protest-and-unrest',
       },
+      {
+        label: 'COVID',
+        path: '/gallery/covid',
+      },
     ],
   },
   {

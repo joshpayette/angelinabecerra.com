@@ -32,6 +32,8 @@ const imageList: GalleryConfig = {
     },
     { filename: '/galleries/protest-and-unrest/5.JPG' },
     { filename: '/galleries/protest-and-unrest/8.JPG' },
+    { filename: '/galleries/covid/1.jpg' },
+    { filename: '/galleries/covid/10.jpg' },
     { filename: '/galleries/pride-and-hope/5.JPG' },
     { filename: '/galleries/pride-and-hope/1.JPG' },
     { filename: '/galleries/pride-and-hope/10.JPG' },
