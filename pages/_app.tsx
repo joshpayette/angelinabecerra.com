@@ -2,10 +2,10 @@ import * as React from 'react'
 import Head from 'next/head'
 import { ThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import { AppProps } from 'next/dist/next-server/lib/router/router'
 import { makeStyles } from '@material-ui/core/styles'
 import { theme } from 'theme'
 import { SiteNavigation } from 'components/navigation'
+import { AppProps } from 'next/app'
 
 const useStyles = makeStyles((theme) => ({
   '@global': {

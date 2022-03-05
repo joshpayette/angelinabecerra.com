@@ -22,6 +22,23 @@
     { "filename": "24.JPG"},
     { "filename": "28.JPG"},
     { "filename": "29.JPG"},
-    { "filename": "30.JPG"}
+    { "filename": "30.JPG"},
+    { "filename": "31.jpg"},
+    { "filename": "32.jpg"},
+    { "filename": "33.jpg"},
+    { "filename": "34.jpg"},
+    { "filename": "35.jpg"},
+    { "filename": "36.jpg"},
+    { "filename": "37.jpg"},
+    { "filename": "38.jpg"},
+    { "filename": "39.jpg"},
+    { "filename": "40.jpg"},
+    { "filename": "41.jpg"},
+    { "filename": "42.jpg"},
+    { "filename": "43.jpg", "backgroundPosition": "right center"},
+    { "filename": "44.jpg", "backgroundPosition": "left bottom"},
+    { "filename": "45.jpg"},
+    { "filename": "46.jpg"},
+    { "filename": "47.jpg"}
   ]
 }

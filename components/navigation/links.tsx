@@ -31,10 +31,6 @@ export const siteLinks: SiteLinkType[] = [
         path: '/gallery/fine-art',
       },
       {
-        label: 'Photo 275 Portfolio',
-        path: '/gallery/photo-275-portfolio',
-      },
-      {
         label: 'Portrait & Fashion',
         path: '/gallery/portrait-and-fashion',
       },

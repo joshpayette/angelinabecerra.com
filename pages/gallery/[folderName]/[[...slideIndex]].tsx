@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
 const galleries = [
   { folder: 'event-photography', name: 'Event Photography' },
   { folder: 'fine-art', name: 'Fine Art' },
-  { folder: 'photo-275-portfolio', name: 'Photo 275 Portfolio' },
   { folder: 'portrait-and-fashion', name: 'Portrait & Fashion' },
   { folder: 'pride-and-hope', name: 'Pride & Hope' },
   { folder: 'protest-and-unrest', name: 'Protest & Unrest' },
