@@ -12,7 +12,7 @@ import {
   useMediaQuery,
 } from '@material-ui/core'
 import { DialogTitle } from './DialogTitle'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import { TouchApp as TouchAppIcon } from '@material-ui/icons'
 
 const useStyles = makeStyles((theme) => ({
