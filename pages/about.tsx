@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Container, Grid, Typography } from '@material-ui/core'
-import Image from "next/legacy/image"
+import Image from 'next/image'
 import clsx from 'clsx'
 
 const useStyles = makeStyles((theme) => ({
@@ -67,6 +67,7 @@ export default function AboutPage() {
             layout="fill"
             objectFit="cover"
             objectPosition="top center"
+            unoptimized
           />
         </Grid>
         <Grid item xs={12} sm={6} className={classes.textWrapper}>

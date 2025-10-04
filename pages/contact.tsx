@@ -7,7 +7,7 @@ import {
   Link as MuiLink,
   Typography,
 } from '@material-ui/core'
-import Image from "next/legacy/image"
+import Image from 'next/image'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { Form, Formik, Field, FormikProps } from 'formik'
@@ -333,6 +333,7 @@ export default function ContactPage() {
             layout="fill"
             objectFit="cover"
             objectPosition="center"
+            unoptimized
           />
         </Grid>
       </Grid>
