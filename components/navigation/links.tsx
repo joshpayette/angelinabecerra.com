@@ -39,13 +39,9 @@ export const siteLinks: SiteLinkType[] = [
         path: '/gallery/pride-and-hope',
       },
       {
-        label: 'Protest & Unrest',
-        path: '/gallery/protest-and-unrest',
-      },
-      {
-        label: 'COVID',
-        path: '/gallery/covid',
-      },
+        label: 'Protest',
+        path: '/gallery/protest',
+      }
     ],
   },
   {

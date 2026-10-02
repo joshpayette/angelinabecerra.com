@@ -56,7 +56,7 @@ export default function AboutPage() {
     <Container component="main" disableGutters className={classes.container}>
       <Grid
         container
-        justify="flex-start"
+        justifyContent="flex-start"
         alignItems="flex-start"
         className={classes.fullHeight}
       >
@@ -88,25 +88,11 @@ export default function AboutPage() {
           >
             Photography has given me a meaning and purpose in life, and enabled
             me to overcome personal setbacks. Like millions of others, I have
-            struggled with mental and physical illness (MDD, GAD, and
-            fibromyalgia). Photography provides me an outlet to express what I
-            cannot through words, and helps me to try to play a part in
-            affecting positive change. I focus on emotions, whether it be the
-            pain expressed at a political protest, or a tender moment between a
-            father and son at a celebratory festival.
-          </Typography>
-          <Typography
-            variant="body1"
-            component="p"
-            color="inherit"
-            className={clsx(classes.greyText, classes.paragraph)}
-          >
-            My goal is to show the threads of hope, despair, pain, and joy that
-            connect everyone, and hopefully evoke awareness and empathy towards
-            a person the viewer has never met. While I found photography later
-            in my life, I am eager to continue the journey of pursuing my
-            passion, and to keep others dealing with mental illness apprised of
-            the mistakes, challenges, and accomplishments I learn from along the
+            struggled with mental and physical illness. Photography provides me
+            with an outlet to express what I cannot through words, and helps me
+            to try to play a part in affecting positive change. While I found
+            photography later in my life, I am eager to continue the journey of
+            pursuing my passion and to hopefully make a difference along the
             way.
           </Typography>
           <ul>

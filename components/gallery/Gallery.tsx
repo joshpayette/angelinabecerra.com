@@ -565,7 +565,7 @@ export const Gallery = ({
               <ChevronLeft className={classes.arrowIcon} />
             </IconButton>
           </Grid>
-          <Grid item container justify="center" xs>
+          <Grid item container justifyContent="center" xs>
             <IconButton onClick={() => setGalleryDialogOpen(true)}>
               <PhotoAlbumIcon />
             </IconButton>

@@ -25,8 +25,7 @@ const galleries = [
   { folder: 'fine-art', name: 'Fine Art' },
   { folder: 'portrait-and-fashion', name: 'Portrait & Fashion' },
   { folder: 'pride-and-hope', name: 'Pride & Hope' },
-  { folder: 'protest-and-unrest', name: 'Protest & Unrest' },
-  { folder: 'covid', name: 'COVID' },
+  { folder: 'protest', name: 'Protest & Unrest' },
 ]
 
 export async function getStaticPaths() {

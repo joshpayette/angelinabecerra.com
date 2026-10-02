@@ -115,7 +115,7 @@ export default function ContactPage() {
 
   return (
     <Container component="main" className={classes.main}>
-      <Grid container justify="flex-start" alignItems="flex-start" spacing={2}>
+      <Grid container justifyContent="flex-start" alignItems="flex-start" spacing={2}>
         <Grid
           item
           container
